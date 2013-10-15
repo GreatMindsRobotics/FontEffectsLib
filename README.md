@@ -7,8 +7,7 @@ Core Types
 ---------------------------
 These are the core interfaces, classes and extensions in this library. They are located in the FontEffectsLib.CoreTypes namespace. 
 
-Core Interfaces:
-----------------
+### Core Interfaces:
 * **ISprite**: Defines a basic drawable item in an XNA game
 * **IStateful**: Allows fonts to define events and pass custom state change information via the **StateEventArgs** class. Use to add sound effects at the right time, trigger other fonts effects, and more.
 
@@ -37,6 +36,12 @@ These are the creatable types provided by the library. They are located in the F
 ### Sprites:
 * **GameSprite**: Basic sprite; inherits from **BaseGameObject**
 * **ComplexSprite**: *Under development*...
+
+
+Code Samples
+------------
+Take a look at the **FontEffectsLibSamples** project.
+
 
 License
 --------
