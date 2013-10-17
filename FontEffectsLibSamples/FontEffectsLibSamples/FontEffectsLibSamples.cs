@@ -26,6 +26,7 @@ namespace FontEffectsLibSamples
         DropInFont titleText1;
         FadingFont titleText2;
         DropInFont titleText3;
+        ArcadeFont insertCoins;
 
         SoundEffect crashEffect;
 
@@ -90,6 +91,12 @@ namespace FontEffectsLibSamples
             titleText3.Tag = GameTags.StartTitleFadeIn;
 
             crashEffect = Content.Load<SoundEffect>("Crash");            
+
+
+            insertCoins = new ArcadeFont(Content.Load<SpriteFont>("ArcadeFont"), new Vector2(300, 400), new List<Color>(new Color[] { Color.Red, Color.White, Color.Yellow, Color.Blue }));
+            insertCoins.ShadowPosition = new Vector2(insertCoins.Position.X - 1, insertCoins.Position.Y + 1);
+            insertCoins.ColorCyclesPerSecond = 15;  //Default is 10; smaller number blinks slower
+            insertCoins.Text.Append("INSERT COINS");
         }
 
         void titleText2_StateChanged(object sender, StateEventArgs e)
@@ -141,6 +148,8 @@ namespace FontEffectsLibSamples
             titleText2.Update(gameTime);
             titleText3.Update(gameTime);
 
+            insertCoins.Update(gameTime);
+
             base.Update(gameTime);
         }
 
@@ -157,6 +166,8 @@ namespace FontEffectsLibSamples
             titleText2.Draw(spriteBatch);
             titleText1.Draw(spriteBatch);
             titleText3.Draw(spriteBatch);
+
+            insertCoins.Draw(spriteBatch);
 
             spriteBatch.End();
 
