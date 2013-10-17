@@ -32,6 +32,7 @@ These are the creatable types provided by the library. They are located in the F
 * **ShadowFont**: Easily add a shadow to your text, making it look 3D. Shadow can be turned on or off. Inherits from **GameFont**, and is the base for all other fonts in this library.
 * **DropInFont**: Start your text anywhere (like off-screen), and let it drop to a certain Y-position (like center screen). Once the text drops, there is a really cool "bounce effect"! This class implements **IStateful**, raising events on *Drop*, *Compress*, *Expand*, and *Done* state transitions.
 * **FadingFont**: Fade your text in or out! Neat effect for title screens. This class implements **IStateful**, raising events on *NotFading*, *Fading*, and *TargetValueReached* state transitions.
+* **ArcadeFont**: Create retro-style arcade fonts that cycle through colors at a specified rate. Set the rate as the number of cycles per second, and provide a list of colors to cycle through - neat effect! This class inherits from ShadowFont - on by default, but can be disabled or relocated in user code.
 
 ### Sprites:
 * **GameSprite**: Basic sprite; inherits from **BaseGameObject**
