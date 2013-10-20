@@ -76,14 +76,30 @@ namespace FontEffectsLib.FontTypes
                 case FontState.Drop:
                     if (_position.X < _targetPosition.X)
                     {
-                        _position.X += _dropSpeed.X;
-                        _shadowPosition.X += _dropSpeed.X;
+                        if (_position.X + _dropSpeed.X < _targetPosition.X)
+                        {
+                            _position.X += _dropSpeed.X;
+                            _shadowPosition.X += _dropSpeed.X;
+                        }
+                        else
+                        {
+                            _shadowPosition.X += _targetPosition.X - _position.X;
+                            _position.X = _targetPosition.X;
+                        }
                     }
 
                     if (_position.Y < _targetPosition.Y)
                     {
-                        _position.Y += _dropSpeed.Y;
-                        _shadowPosition.Y += _dropSpeed.Y;
+                        if (_position.Y + _dropSpeed.Y < _targetPosition.Y)
+                        {
+                            _position.Y += _dropSpeed.Y;
+                            _shadowPosition.Y += _dropSpeed.Y;
+                        }
+                        else
+                        {
+                            _shadowPosition.Y += _targetPosition.Y - _position.Y;
+                            _position.Y = _targetPosition.Y;
+                        }
                     }
 
                     if (_position.X >= _targetPosition.X && _position.Y >= _targetPosition.Y)
