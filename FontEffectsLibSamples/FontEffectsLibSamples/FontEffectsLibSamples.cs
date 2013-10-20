@@ -92,11 +92,12 @@ namespace FontEffectsLibSamples
             titleText3.Tag = GameTags.StartTitleFadeIn;
 
             Vector2 byPos = new Vector2(titleText1.Position.X - 100, -1000);
-            by = new AccelDropInFont(Content.Load<SpriteFont>("GameFont"), byPos, screenSize / 2, new Vector2(0, 1), "By:", Color.Orange, new Vector2(0, 1.01f));
+            by = new AccelDropInFont(Content.Load<SpriteFont>("GameFont"), byPos, screenSize / 2, new Vector2(0, 5), "By:", Color.Orange, new Vector2(0, 1.5f));
             by.TargetPosition = titleText1.TargetPosition - new Vector2(100, 100);
             by.SetCenterAsOrigin();
             by.ShadowPosition = new Vector2(by.Position.X - 4, by.Position.Y + 4);
             by.ShadowColor = Color.Black;
+            by._maxDropSpeed = new Vector2(15, 15);
 
             crashEffect = Content.Load<SoundEffect>("Crash");            
 
