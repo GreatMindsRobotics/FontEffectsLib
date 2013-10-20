@@ -27,6 +27,7 @@ namespace FontEffectsLibSamples
         FadingFont titleText2;
         DropInFont titleText3;
         ArcadeFont insertCoins;
+        AccelDropInFont by;
 
         SoundEffect crashEffect;
 
@@ -61,7 +62,7 @@ namespace FontEffectsLibSamples
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            titleText1 = new DropInFont(Content.Load<SpriteFont>("GameFont"), new Vector2(viewport.HalfWidth(), -400), screenSize / 2, new Vector2(0, 20), "Great Minds", Color.OrangeRed);
+            titleText1 = new DropInFont(Content.Load<SpriteFont>("GameFont"), new Vector2(viewport.HalfWidth(), -1000), screenSize / 2, new Vector2(0, 20), "Great Minds", Color.OrangeRed);
             titleText1.TargetPosition = new Vector2(titleText1.TargetPosition.X, titleText1.TargetPosition.Y - titleText1.Size.Y / 4);
             titleText1.SetCenterAsOrigin();
             titleText1.ShadowPosition = new Vector2(titleText1.Position.X - 4, titleText1.Position.Y + 4);
@@ -90,6 +91,13 @@ namespace FontEffectsLibSamples
             titleText3.StateChanged += new EventHandler<StateEventArgs>(statefulFont_StateChanged);
             titleText3.Tag = GameTags.StartTitleFadeIn;
 
+            Vector2 byPos = new Vector2(titleText1.Position.X - 100, -1000);
+            by = new AccelDropInFont(Content.Load<SpriteFont>("GameFont"), byPos, screenSize / 2, new Vector2(0, 1), "By:", Color.Orange, new Vector2(0, 1.01f));
+            by.TargetPosition = titleText1.TargetPosition - new Vector2(100, 100);
+            by.SetCenterAsOrigin();
+            by.ShadowPosition = new Vector2(by.Position.X - 4, by.Position.Y + 4);
+            by.ShadowColor = Color.Black;
+
             crashEffect = Content.Load<SoundEffect>("Crash");            
 
 
@@ -105,7 +113,6 @@ namespace FontEffectsLibSamples
             {   
                 if ((FadingFont.FontState)e.Data == FadingFont.FontState.TargetValueReached)
                 {
-                    //TODO: Transition to next screen
                     Exit();
                 }
             }
@@ -148,6 +155,8 @@ namespace FontEffectsLibSamples
             titleText2.Update(gameTime);
             titleText3.Update(gameTime);
 
+            by.Update(gameTime);
+
             insertCoins.Update(gameTime);
 
             base.Update(gameTime);
@@ -166,6 +175,8 @@ namespace FontEffectsLibSamples
             titleText2.Draw(spriteBatch);
             titleText1.Draw(spriteBatch);
             titleText3.Draw(spriteBatch);
+
+            by.Draw(spriteBatch);
 
             insertCoins.Draw(spriteBatch);
 

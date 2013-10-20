@@ -64,6 +64,7 @@
     <Compile Include="CoreTypes\ISprite.cs" />
     <Compile Include="CoreTypes\IStateful.cs" />
     <Compile Include="CoreTypes\StateEventArgs.cs" />
+    <Compile Include="FontTypes\AccelDropInFont.cs" />
     <Compile Include="FontTypes\ArcadeFont.cs" />
     <Compile Include="FontTypes\DropInFont.cs" />
     <Compile Include="FontTypes\FadingFont.cs" />
