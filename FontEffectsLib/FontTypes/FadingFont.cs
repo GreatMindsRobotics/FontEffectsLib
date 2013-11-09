@@ -35,6 +35,9 @@ namespace FontEffectsLib.FontTypes
         protected Color _targetTintColor;
         protected Color _targetShadowColor;
 
+        protected Color _startingTintColor;
+        protected Color _startingShadowColor;
+
         public virtual FadingType FadeType
         {
             get { return _fadeType; }
@@ -86,28 +89,35 @@ namespace FontEffectsLib.FontTypes
         public FadingFont(SpriteFont font, Vector2 position, float startingAlpha, float targetAlpha, float fadeStep, float brightness, String text, Color tintColor, Vector2 shadowPosition, Color shadowColor, FadingType fadingType, bool startFading)
             : base(font, text, position, tintColor, shadowPosition, shadowColor)
         {
-            _state = FontState.Fading;
-
             _startingAlpha = startingAlpha;
             _targetAlpha = targetAlpha;
             _fadeStep = fadeStep;
-            _alpha = startingAlpha;
-
             _fadeType = fadingType;
+
+            _startingTintColor = tintColor;
+            _startingShadowColor = shadowColor;
+
+            Reset();
+        }
+
+        public void Reset()
+        {
+            _state = FontState.Fading;
+            _alpha = _startingAlpha;
 
             if (_fadeType == FadingType.In)
             {
-                _targetTintColor = tintColor;
+                _targetTintColor = _startingTintColor;
                 _tintColor = Color.Transparent;
 
-                _targetShadowColor = shadowColor;
+                _targetShadowColor = _startingShadowColor;
                 _shadowColor = Color.Transparent;
             }
             else
             {
                 _targetTintColor = Color.Transparent;
                 _targetShadowColor = Color.Transparent;
-            }
+            }        
         }
 
         public override void Update(GameTime gameTime)
