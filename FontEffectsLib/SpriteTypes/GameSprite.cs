@@ -35,7 +35,7 @@ namespace FontEffectsLib.SpriteTypes
         
         public override void SetCenterAsOrigin()
         {
-            _origin = new Vector2(_texture.Width / 2, _texture.Height / 2) * _scale;
+            _origin = new Vector2((float)_texture.Width / 2f, (float)_texture.Height / 2f);
         }
 
         public override void Update(GameTime gameTime)
