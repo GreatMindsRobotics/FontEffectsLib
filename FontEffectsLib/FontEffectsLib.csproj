@@ -64,6 +64,7 @@
     <Compile Include="CoreTypes\Extensions.cs" />
     <Compile Include="CoreTypes\ISprite.cs" />
     <Compile Include="CoreTypes\IStateful.cs" />
+    <Compile Include="CoreTypes\SpriteManagerComponent.cs" />
     <Compile Include="CoreTypes\StateEventArgs.cs" />
     <Compile Include="FontTypes\AccelDropInFont.cs" />
     <Compile Include="FontTypes\ArcadeFont.cs" />
