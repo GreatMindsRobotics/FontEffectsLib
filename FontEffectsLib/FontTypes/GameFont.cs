@@ -33,6 +33,16 @@ namespace FontEffectsLib.FontTypes
         public GameFont(SpriteFont font, String text, Vector2 position, Color tintColor)
             : base(position, tintColor)
         {
+            if (font == null)
+            {
+                throw new ArgumentNullException("font");
+            }
+            if (text == null)
+            {
+                //Null string = assume empty string, should I throw ArgumentNullException instead?
+                text = String.Empty;
+            }
+
             _font = font;
             _text = new StringBuilder(text);
         }
@@ -52,7 +62,7 @@ namespace FontEffectsLib.FontTypes
 
         public override void Update(GameTime gameTime)
         {
-
+            //Does nothing, intended for implementation by subclass
         }
 
         public override void Draw(SpriteBatch spriteBatch)

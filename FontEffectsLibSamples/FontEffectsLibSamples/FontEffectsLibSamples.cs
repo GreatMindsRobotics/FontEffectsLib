@@ -102,7 +102,7 @@ namespace FontEffectsLibSamples
             crashEffect = Content.Load<SoundEffect>("Crash");            
 
 
-            insertCoins = new ArcadeFont(Content.Load<SpriteFont>("ArcadeFont"), new Vector2(300, 400), new List<Color>(new Color[] { Color.Red, Color.White, Color.Yellow, Color.Blue }));
+            insertCoins = new ArcadeFont(Content.Load<SpriteFont>("ArcadeFont"), new Vector2(300, 400), Color.Red, Color.White, Color.Yellow, Color.Blue);
             insertCoins.ShadowPosition = new Vector2(insertCoins.Position.X - 1, insertCoins.Position.Y + 1);
             insertCoins.ColorCyclesPerSecond = 15;  //Default is 10; smaller number blinks slower
             insertCoins.Text.Append("INSERT COINS");

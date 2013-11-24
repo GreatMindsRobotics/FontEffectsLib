@@ -8,6 +8,9 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace FontEffectsLib.FontTypes
 {
+    /// <summary>
+    /// An arcade-style font which rapidly cycles through colors.
+    /// </summary>
     public class ArcadeFont : ShadowFont
     {
         protected float _colorCyclesPerSecond;
@@ -29,28 +32,50 @@ namespace FontEffectsLib.FontTypes
             }
         }
 
+        /// <summary>
+        /// Gets the list of colors for the font to cycle through.
+        /// </summary>
         public List<Color> FontColors
         {
             get { return _fontColors; }
-            set { _fontColors = value; }
         }
 
-        public ArcadeFont(SpriteFont font, Vector2 position, List<Color> tintColors)
-            : this(font, position, String.Empty, tintColors, _defaultColorCyclesPerSecond)
+        public ArcadeFont(SpriteFont font, Vector2 position, params Color[] tintColors)
+            : this(font, position, String.Empty, _defaultColorCyclesPerSecond, tintColors)
         {
             //Pass-through constructor
         }
 
-        public ArcadeFont(SpriteFont font, Vector2 position, String text, List<Color> tintColors, float colorChangeDelay)
-            : base(font, position, tintColors[0])
+        public ArcadeFont(SpriteFont font, Vector2 position, String text, float colorChangeDelay, params Color[] tintColors)
+            : base(font, position, Color.White)
         {
+            //Color.White = null check for color array, color is set later
+
+            if (text == null)
+            {
+                //Null string = assume empty string, should I throw ArgumentNullException instead?
+                text = String.Empty;
+            }
+
+            if (tintColors == null)
+            {
+                throw new ArgumentNullException("tintColors");
+            }
+
+            if (tintColors.Length < 1)
+            {
+                throw new ArgumentException("The tintColors array must contain at least one element.");
+            }
+
             _text = new StringBuilder(text);
 
             _colorCyclesPerSecond = colorChangeDelay;
             _elapsedTime = TimeSpan.Zero;
-            _fontColors = tintColors;
+            _fontColors = tintColors.ToList();
 
-            _delayTime = TimeSpan.FromMilliseconds(1000 / colorChangeDelay / tintColors.Count);
+            _delayTime = TimeSpan.FromMilliseconds(1000 / colorChangeDelay / tintColors.Length);
+
+            _tintColor = tintColors[0];
         }
 
         public override void Update(GameTime gameTime)
