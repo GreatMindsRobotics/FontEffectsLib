@@ -13,15 +13,27 @@ namespace FontEffectsLib.FontTypes
     /// </summary>
     public class ArcadeFont : ShadowFont
     {
+        /// <summary>
+        /// The number of times to cycle through <see cref="FontColors"/> in one second.
+        /// </summary>
         protected float _colorCyclesPerSecond;
-        protected List<Color> _fontColors;
 
+
+        //Private: When would the subclass ever need to set this variable?
+        private List<Color> _fontColors;
+
+        /// <summary>
+        /// The index of the current color in <see cref="FontColors"/>.
+        /// </summary>
         protected int currentColor = 0;
 
         private const float _defaultColorCyclesPerSecond = 10;
         private TimeSpan _elapsedTime;
         private TimeSpan _delayTime;
 
+        /// <summary>
+        /// Gets or sets the number of times to cycle through <see cref="FontColors"/> in one second.
+        /// </summary>
         public float ColorCyclesPerSecond
         {
             get { return _colorCyclesPerSecond; }
@@ -40,12 +52,27 @@ namespace FontEffectsLib.FontTypes
             get { return _fontColors; }
         }
 
+        /// <summary>
+        /// Create a new instance of <see cref="ArcadeFont"/>.
+        /// </summary>
+        /// <param name="font">The font to render.</param>
+        /// <param name="position">The position of the font.</param>
+        /// <param name="tintColors">The colors to cycle through.</param>
         public ArcadeFont(SpriteFont font, Vector2 position, params Color[] tintColors)
             : this(font, position, String.Empty, _defaultColorCyclesPerSecond, tintColors)
         {
             //Pass-through constructor
         }
 
+
+        /// <summary>
+        /// Create a new instance of <see cref="ArcadeFont"/>.
+        /// </summary>
+        /// <param name="font">The font to render.</param>
+        /// <param name="position">The position of the font.</param>
+        /// <param name="text">The text to display.</param>
+        /// <param name="colorChangeDelay">The number of times to cycle through <see cref="FontColors"/> in one second.</param>
+        /// <param name="tintColors">The colors to cycle through.</param>
         public ArcadeFont(SpriteFont font, Vector2 position, String text, float colorChangeDelay, params Color[] tintColors)
             : base(font, position, Color.White)
         {
@@ -78,6 +105,10 @@ namespace FontEffectsLib.FontTypes
             _tintColor = tintColors[0];
         }
 
+        /// <summary>
+        /// Update this <see cref="ArcadeFont"/>.
+        /// </summary>
+        /// <param name="gameTime">The current <see cref="GameTime"/>, representing the time elapsed over the course of the game.</param>
         public override void Update(GameTime gameTime)
         {
             if (_elapsedTime >= _delayTime)
