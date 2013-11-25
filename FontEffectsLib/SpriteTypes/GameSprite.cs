@@ -77,7 +77,10 @@ namespace FontEffectsLib.SpriteTypes
         /// <param name="spriteBatch">The <see cref="SpriteBatch"/> to render this <see cref="GameSprite"/> to.</param>
         public override void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(_texture, _position, _sourceRectangle, _tintColor, _rotation, _origin, _scale, _effects, _layerDepth);
+            if (_isVisible == true)
+            {
+                spriteBatch.Draw(_texture, _position, _sourceRectangle, _tintColor, _rotation, _origin, _scale, _effects, _layerDepth);
+            }
         }
     }
 }

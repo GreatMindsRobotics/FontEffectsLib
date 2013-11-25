@@ -16,9 +16,16 @@ namespace FontEffectsLib.CoreTypes
         protected Vector2 _scale;
         protected SpriteEffects _effects;
         protected float _layerDepth;
+        protected bool _isVisible;
 
         protected object _tag;
 
+        public virtual bool IsVisible
+        {
+            get{return _isVisible;}
+            set{_isVisible = value;}
+        }
+        
         public virtual Vector2 Position
         {
             get { return _position; }
@@ -77,6 +84,7 @@ namespace FontEffectsLib.CoreTypes
             _scale = Vector2.One;
             _effects = SpriteEffects.None;
             _layerDepth = 0f;
+            _isVisible = true;
         }
 
         public abstract void SetCenterAsOrigin();
