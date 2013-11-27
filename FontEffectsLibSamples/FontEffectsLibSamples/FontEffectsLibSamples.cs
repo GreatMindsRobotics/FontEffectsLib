@@ -31,6 +31,8 @@ namespace FontEffectsLibSamples
 
         SoundEffect crashEffect;
 
+        List<SlidingFont> slidingText;
+
         public FontEffectsLibSamples()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -106,6 +108,25 @@ namespace FontEffectsLibSamples
             insertCoins.ShadowPosition = new Vector2(insertCoins.Position.X - 1, insertCoins.Position.Y + 1);
             insertCoins.ColorCyclesPerSecond = 15;  //Default is 10; smaller number blinks slower
             insertCoins.Text.Append("INSERT COINS");
+
+            slidingText = new List<SlidingFont>();
+
+            Vector2 targetPos = new Vector2(500, 400);
+            foreach (char letter in "COOL")
+            {
+                slidingText.Add(new SlidingFont(Content.Load<SpriteFont>("ArcadeFont"), new Vector2(50, 350), targetPos, 2f, letter.ToString(), Color.Red) { EnableShadow = false });
+                targetPos.X += 12;
+            }
+
+            targetPos = new Vector2(500, 420);
+            Random random = new Random();
+
+            foreach (char letter in "Effects!")
+            {
+                slidingText.Add(new SlidingFont(Content.Load<SpriteFont>("SlidingFont"), new Vector2(50, 350), targetPos, 1f + (float)random.NextDouble(), letter.ToString(), Color.Red) { EnableShadow = false });
+                targetPos.X += 12;
+            }
+
         }
 
         void titleText2_StateChanged(object sender, StateEventArgs e)
@@ -114,7 +135,10 @@ namespace FontEffectsLibSamples
             {   
                 if ((FadingFont.FontState)e.Data == FadingFont.FontState.TargetValueReached)
                 {
-                    Exit();
+                    foreach (SlidingFont slidingFont in slidingText)
+                    {
+                        slidingFont.Slide();
+                    }
                 }
             }
         }
@@ -158,6 +182,11 @@ namespace FontEffectsLibSamples
 
             by.Update(gameTime);
 
+            foreach (SlidingFont slidingFont in slidingText)
+            {
+                slidingFont.Update(gameTime);
+            }
+
             insertCoins.Update(gameTime);
 
             base.Update(gameTime);
@@ -178,6 +207,11 @@ namespace FontEffectsLibSamples
             titleText3.Draw(spriteBatch);
 
             by.Draw(spriteBatch);
+
+            foreach (SlidingFont slidingFont in slidingText)
+            {
+                slidingFont.Draw(spriteBatch);
+            }
 
             insertCoins.Draw(spriteBatch);
 

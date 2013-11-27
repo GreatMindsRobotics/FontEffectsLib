@@ -72,6 +72,7 @@
     <Compile Include="FontTypes\FadingFont.cs" />
     <Compile Include="FontTypes\GameFont.cs" />
     <Compile Include="FontTypes\ShadowFont.cs" />
+    <Compile Include="FontTypes\SlidingFont.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SpriteTypes\GameSprite.cs" />
   </ItemGroup>
