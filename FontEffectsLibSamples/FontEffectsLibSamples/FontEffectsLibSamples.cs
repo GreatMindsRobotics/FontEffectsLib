@@ -114,8 +114,8 @@ namespace FontEffectsLibSamples
             Vector2 targetPos = new Vector2(500, 400);
             foreach (char letter in "COOL")
             {
-                slidingText.Add(new SlidingFont(Content.Load<SpriteFont>("ArcadeFont"), new Vector2(50, 350), targetPos, 2f, letter.ToString(), Color.Red) { EnableShadow = false });
-                targetPos.X += 12;
+                slidingText.Add(new SlidingFont(Content.Load<SpriteFont>("SlidingFont"), new Vector2(50, 350), targetPos, 2f, letter.ToString(), Color.Red) { EnableShadow = false, IsVisible = false });
+                targetPos.X += 15;
             }
 
             targetPos = new Vector2(500, 420);
@@ -123,7 +123,7 @@ namespace FontEffectsLibSamples
 
             foreach (char letter in "Effects!")
             {
-                slidingText.Add(new SlidingFont(Content.Load<SpriteFont>("SlidingFont"), new Vector2(50, 350), targetPos, 1f + (float)random.NextDouble(), letter.ToString(), Color.Red) { EnableShadow = false });
+                slidingText.Add(new SlidingFont(Content.Load<SpriteFont>("SlidingFont"), new Vector2(random.Next(0, GraphicsDevice.Viewport.Width), random.Next(0, GraphicsDevice.Viewport.Height)), targetPos, 1f + (float)random.NextDouble(), letter.ToString(), Color.Red) { EnableShadow = false, IsVisible = false });
                 targetPos.X += 12;
             }
 

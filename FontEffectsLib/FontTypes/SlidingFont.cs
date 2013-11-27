@@ -80,14 +80,15 @@ namespace FontEffectsLib.FontTypes
                     break;
 
                 case FontState.Done:
+                    _position = _targetPosition;
                     changeState(FontState.Ready);
                     break;
 
                 case FontState.Sliding:
-                    float squareOfDistanceToTarget = Math.Abs((_targetPosition - _position).Length());
-                    if (squareOfDistanceToTarget > 1)
+                    float distanceToTarget = Math.Abs((_targetPosition - _position).Length());
+                    if (distanceToTarget > 0.5f)
                     {
-                        _position += _unitVectorToTarget * squareOfDistanceToTarget * (float)gameTime.ElapsedGameTime.TotalSeconds * _slideSpeed;
+                        _position += _unitVectorToTarget * distanceToTarget * (float)gameTime.ElapsedGameTime.TotalSeconds * _slideSpeed;
                     }
                     else
                     {
@@ -99,6 +100,7 @@ namespace FontEffectsLib.FontTypes
 
         public virtual void Slide()
         {
+            IsVisible = true;
             changeState(FontState.Sliding);
         }
 
