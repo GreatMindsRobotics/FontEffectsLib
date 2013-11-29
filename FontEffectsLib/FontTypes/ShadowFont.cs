@@ -49,6 +49,11 @@ namespace FontEffectsLib.FontTypes
 
          public override void Draw(SpriteBatch spriteBatch)
          {
+             if (!_isVisible)
+             {
+                 return;
+             }
+
              if (_enableShadow && _text != null)
              {
                 spriteBatch.DrawString(_font, _text, _shadowPosition, _shadowColor, _rotation, _origin, _scale, _effects, _layerDepth);

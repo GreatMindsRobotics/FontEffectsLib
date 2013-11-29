@@ -67,7 +67,7 @@ namespace FontEffectsLib.FontTypes
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            if(_isVisible == true)
+            if(_isVisible)
             {
                 if (_text != null)
                 {

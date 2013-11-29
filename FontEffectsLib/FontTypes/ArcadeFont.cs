@@ -111,6 +111,11 @@ namespace FontEffectsLib.FontTypes
         /// <param name="gameTime">The current <see cref="GameTime"/>, representing the time elapsed over the course of the game.</param>
         public override void Update(GameTime gameTime)
         {
+            if (!_isVisible)
+            {
+                return;
+            }
+
             if (_elapsedTime >= _delayTime)
             {
                 currentColor = currentColor + 1 == _fontColors.Count ? 0 : currentColor + 1;

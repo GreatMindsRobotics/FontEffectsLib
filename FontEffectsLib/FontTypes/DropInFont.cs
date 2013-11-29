@@ -71,6 +71,11 @@ namespace FontEffectsLib.FontTypes
 
         public override void Update(GameTime gameTime)
         {
+            if (!_isVisible)
+            {
+                return;
+            }
+
             switch (_state)
             { 
                 case FontState.Drop:
