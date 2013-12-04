@@ -30,6 +30,10 @@ namespace FontEffectsLibSamples
         AccelDropInFont by;
 
         SoundEffect crashEffect;
+        SoundEffect coinsEffect;
+
+        KeyboardState lastKeyboardState;
+        KeyboardState currentKeyboardState;
 
         List<SlidingFont> slidingText;
 
@@ -101,20 +105,23 @@ namespace FontEffectsLibSamples
             by.ShadowColor = Color.Black;
             by._maxDropSpeed = new Vector2(15, 15);
 
-            crashEffect = Content.Load<SoundEffect>("Crash");            
+            crashEffect = Content.Load<SoundEffect>("Crash");
 
+            //Obtained from http://www.freesound.org/people/EdgardEdition/sounds/113095/
+            coinsEffect = Content.Load<SoundEffect>("insertcoin");
 
             insertCoins = new ArcadeFont(Content.Load<SpriteFont>("ArcadeFont"), new Vector2(300, 400), Color.Red, Color.White, Color.Yellow, Color.Blue);
             insertCoins.ShadowPosition = new Vector2(insertCoins.Position.X - 1, insertCoins.Position.Y + 1);
             insertCoins.ColorCyclesPerSecond = 15;  //Default is 10; smaller number blinks slower
             insertCoins.Text.Append("INSERT COINS");
+            insertCoins.IsVisible = false;
 
             slidingText = new List<SlidingFont>();
 
             Vector2 targetPos = new Vector2(500, 400);
             foreach (char letter in "COOL")
             {
-                slidingText.Add(new SlidingFont(Content.Load<SpriteFont>("SlidingFont"), new Vector2(50, 350), targetPos, 2f, letter.ToString(), Color.Red) { EnableShadow = false, IsVisible = false });
+                slidingText.Add(new SlidingFont(Content.Load<SpriteFont>("SlidingFont"), new Vector2(50, 350), targetPos, 2f, letter.ToString(), Color.Red) { EnableShadow = false, IsVisible = false, TargetTolerance = 0.625f });
                 targetPos.X += 15;
             }
 
@@ -139,6 +146,7 @@ namespace FontEffectsLibSamples
                     {
                         slidingFont.Slide();
                     }
+                    insertCoins.IsVisible = true;
                 }
             }
         }
@@ -176,6 +184,8 @@ namespace FontEffectsLibSamples
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
+            currentKeyboardState = Keyboard.GetState();
+
             titleText1.Update(gameTime);
             titleText2.Update(gameTime);
             titleText3.Update(gameTime);
@@ -188,8 +198,16 @@ namespace FontEffectsLibSamples
             }
 
             insertCoins.Update(gameTime);
+            
+            //If we can insert a coin and we in fact did
+            if (insertCoins.IsVisible && ((currentKeyboardState.IsKeyDown(Keys.Space) && lastKeyboardState.IsKeyUp(Keys.Space)) || (currentKeyboardState.IsKeyDown(Keys.Enter) && lastKeyboardState.IsKeyUp(Keys.Enter))))
+            {
+                coinsEffect.Play();
+            }
 
             base.Update(gameTime);
+
+            lastKeyboardState = currentKeyboardState;
         }
 
         /// <summary>
