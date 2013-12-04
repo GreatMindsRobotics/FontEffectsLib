@@ -2,7 +2,8 @@ FontEffectsLib
 ==============
 
 XNA Font Effects Library - great for game titles, menus, and more
-__Written in C#__
+
+_Written in C#_
 
 Core Types
 ---------------------------
