@@ -29,6 +29,9 @@ namespace FontEffectsLib.FontTypes
         protected float _distanceToTarget;
         protected Vector2 _unitVectorToTarget;
 
+        /// <summary>
+        /// Gets or sets the target position (the position to slide to).
+        /// </summary>
         public virtual Vector2 TargetPosition
         {
             get { return _targetPosition; }
@@ -39,6 +42,13 @@ namespace FontEffectsLib.FontTypes
             }
         }
 
+        /// <summary>
+        /// Gets or sets the distance to slide.
+        /// </summary>
+        /// <remarks>
+        /// The distance slided is calculated by multiplying the unit vector representing the direction from the position to the target positon by this speed by the time (in seconds) elapsed since the last frame.
+        /// This value is further multiplied by the remaining distance to the target position. The final value is the distance that the sliding font moves forward.
+        /// </remarks>
         public virtual float SlideSpeed
         {
             get { return _slideSpeed; }
@@ -91,18 +101,35 @@ namespace FontEffectsLib.FontTypes
 
                 case FontState.Sliding:
                     float distanceToTarget = Math.Abs((_targetPosition - _position).Length());
-                    if (distanceToTarget > 0.5f)
+                    if (distanceToTarget > _targetTolerance)
                     {
                         _position += _unitVectorToTarget * distanceToTarget * (float)gameTime.ElapsedGameTime.TotalSeconds * _slideSpeed;
                     }
                     else
                     {
+                        //We're close enough to the target to be considered there
+                        _position = _targetPosition;
+
                         changeState(FontState.Done);
                     }
                     break;
             }
         }
 
+        protected float _targetTolerance = 0.4825f;
+        
+        /// <summary>
+        /// Gets or sets the distance from the target position at which the <see cref="SlidingFont"/> will be considered as done moving.
+        /// </summary>
+        public virtual float TargetTolerance
+        {
+            get { return _targetTolerance; }
+            set { _targetTolerance = value; }
+        }
+        
+        /// <summary>
+        /// Sets the font to visible and begins sliding towards the target position.
+        /// </summary>
         public virtual void Slide()
         {
             IsVisible = true;

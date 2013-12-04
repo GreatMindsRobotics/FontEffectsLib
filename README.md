@@ -1,7 +1,8 @@
 FontEffectsLib
 ==============
 
-C# / XNA Font Effects Library - great for game titles, menus, and more
+XNA Font Effects Library - great for game titles, menus, and more
+__Written in C#__
 
 Core Types
 ---------------------------
@@ -33,6 +34,7 @@ These are the creatable types provided by the library. They are located in the F
 * **DropInFont**: Start your text anywhere (like off-screen), and let it drop to a certain Y-position (like center screen). Once the text drops, there is a really cool "bounce effect"! This class implements **IStateful**, raising events on *Drop*, *Compress*, *Expand*, and *Done* state transitions.
 * **FadingFont**: Fade your text in or out! Neat effect for title screens. This class implements **IStateful**, raising events on *NotFading*, *Fading*, and *TargetValueReached* state transitions.
 * **ArcadeFont**: Create retro-style arcade fonts that cycle through colors at a specified rate. Set the rate as the number of cycles per second, and provide a list of colors to cycle through - neat effect! This class inherits from ShadowFont - on by default, but can be disabled or relocated in user code.
+* **SlidingFont**: Have your text slide in to it's target position, starting out fast and later slowing down. This class implements **IStateful**, raising events on *Ready*, *Sliding*, and *Done* state transitions.
 
 ### Sprites:
 * **GameSprite**: Basic sprite; inherits from **BaseGameObject**
