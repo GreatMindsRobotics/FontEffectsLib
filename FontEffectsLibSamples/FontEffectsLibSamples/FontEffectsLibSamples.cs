@@ -11,6 +11,7 @@ using Microsoft.Xna.Framework.Media;
 using FontEffectsLib.CoreTypes;
 using FontEffectsLib.FontTypes;
 using FontEffectsLib.SpriteTypes;
+using WordSearch.CoreTypes;
 
 namespace FontEffectsLibSamples
 {
@@ -39,6 +40,7 @@ namespace FontEffectsLibSamples
         KeyboardState currentKeyboardState;
 
         List<SlidingFont> slidingText;
+        Panel coolPanel;
 
         public FontEffectsLibSamples()
         {
@@ -140,6 +142,8 @@ namespace FontEffectsLibSamples
                 targetPos.X += 12;
             }
 
+            coolPanel = new Panel(GraphicsDevice, new Vector2(120, 60), Vector2.One, new Vector2(550, 425), new Color(60, 60, 60, 128));
+            coolPanel.IsVisible = false;
         }
 
         void titleText2_StateChanged(object sender, StateEventArgs e)
@@ -148,6 +152,8 @@ namespace FontEffectsLibSamples
             {   
                 if ((FadingFont.FontState)e.Data == FadingFont.FontState.TargetValueReached)
                 {
+                    coolPanel.Expand();
+
                     foreach (SlidingFont slidingFont in slidingText)
                     {
                         slidingFont.Slide();
@@ -211,6 +217,8 @@ namespace FontEffectsLibSamples
                 coinsEffect.Play();
             }
 
+            coolPanel.Update(gameTime);
+
             base.Update(gameTime);
 
             lastKeyboardState = currentKeyboardState;
@@ -240,6 +248,8 @@ namespace FontEffectsLibSamples
             }
 
             insertCoins.Draw(spriteBatch);
+
+            coolPanel.Draw(spriteBatch);
 
             spriteBatch.End();
 
