@@ -11,7 +11,6 @@ using Microsoft.Xna.Framework.Media;
 using FontEffectsLib.CoreTypes;
 using FontEffectsLib.FontTypes;
 using FontEffectsLib.SpriteTypes;
-using WordSearch.CoreTypes;
 
 namespace FontEffectsLibSamples
 {

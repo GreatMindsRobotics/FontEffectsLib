@@ -5,9 +5,8 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using FontEffectsLib.CoreTypes;
-using FontEffectsLib.SpriteTypes;
 
-namespace WordSearch.CoreTypes
+namespace FontEffectsLib.SpriteTypes
 {
     public class Panel : GameSprite, IStateful
     {
