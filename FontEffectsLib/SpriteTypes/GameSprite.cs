@@ -59,6 +59,16 @@ namespace FontEffectsLib.SpriteTypes
             _origin = new Vector2((float)_texture.Width / 2f, (float)_texture.Height / 2f);
         }
 
+
+        /// <summary>
+        /// Scales this <see cref="GameSprite"/> based on current <see cref="Viewport"/> size.
+        /// </summary>
+        /// <param name="viewport">Current <see cref="Viewport"/></param>
+        public virtual void ScaleToViewport(Viewport viewport)
+        {
+            _scale = new Vector2((float)viewport.Width / (float)_texture.Width, (float)viewport.Height / (float)_texture.Height);
+        }
+
         /// <summary>
         /// Updates this <see cref="GameSprite"/>.
         /// </summary>

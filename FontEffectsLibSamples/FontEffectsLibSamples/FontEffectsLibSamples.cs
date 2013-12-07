@@ -10,6 +10,7 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 using FontEffectsLib.CoreTypes;
 using FontEffectsLib.FontTypes;
+using FontEffectsLib.SpriteTypes;
 
 namespace FontEffectsLibSamples
 {
@@ -28,6 +29,8 @@ namespace FontEffectsLibSamples
         DropInFont titleText3;
         ArcadeFont insertCoins;
         AccelDropInFont by;
+
+        GameSprite bgSprite;
 
         SoundEffect crashEffect;
         SoundEffect coinsEffect;
@@ -67,6 +70,9 @@ namespace FontEffectsLibSamples
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
+
+            bgSprite = new GameSprite(Content.Load<Texture2D>("bgImage"), Vector2.Zero, Color.White);
+            bgSprite.ScaleToViewport(GraphicsDevice.Viewport);
 
             titleText1 = new DropInFont(Content.Load<SpriteFont>("GameFont"), new Vector2(viewport.HalfWidth(), -1000), screenSize / 2, new Vector2(0, 20), "Great Minds", Color.OrangeRed);
             titleText1.TargetPosition = new Vector2(titleText1.TargetPosition.X, titleText1.TargetPosition.Y - titleText1.Size.Y / 4);
@@ -219,6 +225,8 @@ namespace FontEffectsLibSamples
             GraphicsDevice.Clear(Color.Turquoise);
 
             spriteBatch.Begin();
+
+            bgSprite.Draw(spriteBatch);
 
             titleText2.Draw(spriteBatch);
             titleText1.Draw(spriteBatch);
