@@ -143,6 +143,7 @@ namespace FontEffectsLibSamples
 
             coolPanel = new Panel(GraphicsDevice, new Vector2(120, 60), Vector2.One, new Vector2(550, 425), new Color(60, 60, 60, 128));
             coolPanel.IsVisible = false;
+            coolPanel.SetTextureWithBackground(Content.Load<Texture2D>("WavyEffect"));
         }
 
         void titleText2_StateChanged(object sender, StateEventArgs e)

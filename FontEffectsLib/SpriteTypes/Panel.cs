@@ -10,6 +10,63 @@ namespace FontEffectsLib.SpriteTypes
 {
     public class Panel : GameSprite, IStateful
     {
+        /// <summary>
+        /// Sets the image of this panel to be the specified image rendered on top of a solid background of the specified color.
+        /// </summary>
+        /// <param name="image">The new image.</param>
+        /// <param name="background">The background color behind the image.</param>
+        public void SetTextureWithBackground(Texture2D image, Color background)
+        {
+            SetTextureWithBackground(image, background, Vector2.Zero);
+        }
+
+        /// <summary>
+        /// Sets the image of this panel to be the specified image rendered on top of a solid background of the specified color.
+        /// </summary>
+        /// <param name="image">The new image.</param>
+        /// <param name="background">The background color behind the image.</param>
+        /// <param name="imagePos">The position of the image relative to the background.</param>
+        /// <remarks>
+        /// This method is expensive and should be called only when neccesary, such as during load time.
+        /// </remarks>
+        public void SetTextureWithBackground(Texture2D image, Color background, Vector2 imagePos)
+        {
+            if (image == null)
+            {
+                throw new ArgumentNullException("image");
+            }
+
+            RenderTarget2D renderImg = new RenderTarget2D(image.GraphicsDevice, image.Width, image.Height);
+            image.GraphicsDevice.SetRenderTarget(renderImg);
+
+            Texture2D solidColor = new Texture2D(image.GraphicsDevice, image.Width, image.Height);
+            solidColor.SetData<Color>(Enumerable.Repeat<Color>(background, image.Width * image.Height).ToArray());
+
+            SpriteBatch temporary = new SpriteBatch(image.GraphicsDevice);
+            temporary.Begin();
+            temporary.Draw(solidColor, Vector2.Zero, Color.White);
+            temporary.Draw(image, imagePos, Color.White);
+            temporary.End();
+            
+            image.GraphicsDevice.SetRenderTarget(null);
+            
+            Color[] finalData = new Color[image.Width * image.Height];
+            renderImg.GetData<Color>(finalData);
+
+            //Reuse instance of texture
+            solidColor.SetData(finalData);
+            Texture = solidColor;
+        }
+
+        /// <summary>
+        /// Sets the image of this panel to be the specified image rendered on top of a solid background of the tint color.
+        /// </summary>
+        /// <param name="image">The new image.</param>
+        public void SetTextureWithBackground(Texture2D image)
+        {
+            SetTextureWithBackground(image, TintColor);
+        }
+
         public event EventHandler<StateEventArgs> StateChanged;
 
         public enum PanelState
