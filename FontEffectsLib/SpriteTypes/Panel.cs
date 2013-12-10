@@ -8,79 +8,65 @@ using FontEffectsLib.CoreTypes;
 
 namespace FontEffectsLib.SpriteTypes
 {
+    /// <summary>
+    /// Create an expandable / collapsable panel. 
+    /// </summary>
     public class Panel : GameSprite, IStateful
     {
         /// <summary>
-        /// Sets the image of this panel to be the specified image rendered on top of a solid background of the specified color.
+        /// StateChanged event is fired when any change in the panel's state occurs. <see cref="StateEventArgs"/> contain <see cref="PanelState"/> as Data.
         /// </summary>
-        /// <param name="image">The new image.</param>
-        /// <param name="background">The background color behind the image.</param>
-        public void SetTextureWithBackground(Texture2D image, Color background)
-        {
-            SetTextureWithBackground(image, background, Vector2.Zero);
-        }
-
-        /// <summary>
-        /// Sets the image of this panel to be the specified image rendered on top of a solid background of the specified color.
-        /// </summary>
-        /// <param name="image">The new image.</param>
-        /// <param name="background">The background color behind the image.</param>
-        /// <param name="imagePos">The position of the image relative to the background.</param>
-        /// <remarks>
-        /// This method is expensive and should be called only when neccesary, such as during load time.
-        /// </remarks>
-        public void SetTextureWithBackground(Texture2D image, Color background, Vector2 imagePos)
-        {
-            if (image == null)
-            {
-                throw new ArgumentNullException("image");
-            }
-
-            RenderTarget2D renderImg = new RenderTarget2D(image.GraphicsDevice, image.Width, image.Height);
-            image.GraphicsDevice.SetRenderTarget(renderImg);
-
-            Texture2D solidColor = new Texture2D(image.GraphicsDevice, image.Width, image.Height);
-            solidColor.SetData<Color>(Enumerable.Repeat<Color>(background, image.Width * image.Height).ToArray());
-
-            SpriteBatch temporary = new SpriteBatch(image.GraphicsDevice);
-            temporary.Begin();
-            temporary.Draw(solidColor, Vector2.Zero, Color.White);
-            temporary.Draw(image, imagePos, Color.White);
-            temporary.End();
-            
-            image.GraphicsDevice.SetRenderTarget(null);
-            
-            Color[] finalData = new Color[image.Width * image.Height];
-            renderImg.GetData<Color>(finalData);
-
-            //Reuse instance of texture
-            solidColor.SetData(finalData);
-            Texture = solidColor;
-        }
-
-        /// <summary>
-        /// Sets the image of this panel to be the specified image rendered on top of a solid background of the tint color.
-        /// </summary>
-        /// <param name="image">The new image.</param>
-        public void SetTextureWithBackground(Texture2D image)
-        {
-            SetTextureWithBackground(image, TintColor);
-        }
-
         public event EventHandler<StateEventArgs> StateChanged;
 
+        /// <summary>
+        /// Panel states, returned by the StateChanged event. Initial state is "Collapsed".
+        /// </summary>
         public enum PanelState
         {
+            /// <summary>
+            /// The panel is fully collapsed. It can be expanded by calling the <see cref="Panel.Expand()"/> method.
+            /// </summary>
             Collapsed,
+            
+            /// <summary>
+            /// The panel is expanding horizontally. It can be collapsed by calling the <see cref="Panel.Collapse()"/> method.
+            /// </summary>
             ExpandingHorizontally,
+            
+            /// <summary>
+            /// The panel is finished expanding horizontally, and is now expanding vertically. It can be collapsed by calling the <see cref="Panel.Collapse()"/> method.
+            /// </summary>
             ExpandingVertically,
+            
+            /// <summary>
+            /// The panel is fully expanded. It can be collapsed by calling the <see cref="Panel.Collapse()"/> method.
+            /// </summary>
             Open,
+
+            /// <summary>
+            /// The panel is collapsing vertically. It can be expanded by calling the <see cref="Panel.Expand()"/> method. 
+            /// </summary>
             CollapsingVertically,
+
+            /// <summary>
+            /// The panel is finished collapsing vertically, and is now collapsing horizontally. It can be expanded by calling the <see cref="Panel.Expand()"/> method.
+            /// </summary>
             CollapsingHorizontally
         }
 
+        /// <summary>
+        /// Panel's current state.
+        /// </summary>
         protected PanelState _state;
+        
+        /// <summary>
+        /// Speed with which to expand/collapse the panel.
+        /// </summary>
         protected Vector2 _speed;
+
+        /// <summary>
+        /// The smallest scale value to scale this panel to in Collapsed state. Default is Vector2.One
+        /// </summary>
         protected Vector2 _minScale;
 
         /// <summary>
@@ -107,6 +93,10 @@ namespace FontEffectsLib.SpriteTypes
             SetCenterAsOrigin();
         }
 
+        /// <summary>
+        /// Standard XNA Game loop Update method.
+        /// </summary>
+        /// <param name="gameTime">GameTime object for current game.</param>
         public override void Update(GameTime gameTime)
         {
             if (!_isVisible)
@@ -197,6 +187,10 @@ namespace FontEffectsLib.SpriteTypes
             return false;
         }
 
+        /// <summary>
+        /// Switches the current state of the panel, and fires StateChanged event, if there are any subscribers.
+        /// </summary>
+        /// <param name="panelState">New state for the current panel.</param>
         protected virtual void switchState(PanelState panelState)
         {
             _state = panelState;

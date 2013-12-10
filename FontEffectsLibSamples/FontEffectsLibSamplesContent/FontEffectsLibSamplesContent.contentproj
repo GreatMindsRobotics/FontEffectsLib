@@ -72,8 +72,15 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="WavyEffect.bmp">
+    <Compile Include="WavyEffect.png">
       <Name>WavyEffect</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="WavyEffect1.png">
+      <Name>WavyEffect1</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>

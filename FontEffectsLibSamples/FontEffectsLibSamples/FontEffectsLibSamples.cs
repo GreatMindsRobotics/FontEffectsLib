@@ -39,7 +39,7 @@ namespace FontEffectsLibSamples
         KeyboardState currentKeyboardState;
 
         List<SlidingFont> slidingText;
-        Panel coolPanel;
+        TexturePanel coolPanel;
 
         public FontEffectsLibSamples()
         {
@@ -125,14 +125,14 @@ namespace FontEffectsLibSamples
 
             slidingText = new List<SlidingFont>();
 
-            Vector2 targetPos = new Vector2(500, 400);
+            Vector2 targetPos = new Vector2(505, 400);
             foreach (char letter in "COOL")
             {
                 slidingText.Add(new SlidingFont(Content.Load<SpriteFont>("SlidingFont"), new Vector2(50, 350), targetPos, 2f, letter.ToString(), Color.Red) { EnableShadow = false, IsVisible = false, TargetTolerance = 0.625f });
                 targetPos.X += 15;
             }
 
-            targetPos = new Vector2(500, 420);
+            targetPos = new Vector2(505, 420);
             Random random = new Random();
 
             foreach (char letter in "Effects!")
@@ -141,9 +141,17 @@ namespace FontEffectsLibSamples
                 targetPos.X += 12;
             }
 
-            coolPanel = new Panel(GraphicsDevice, new Vector2(120, 60), Vector2.One, new Vector2(550, 425), new Color(60, 60, 60, 128));
+            coolPanel = new TexturePanel(Content.Load<Texture2D>("WavyEffect"), new Vector2(120, 60), Vector2.One * .5f, new Vector2(550, 425), new Color(60, 60, 60, 128));
             coolPanel.IsVisible = false;
-            coolPanel.SetTextureWithBackground(Content.Load<Texture2D>("WavyEffect"));
+            coolPanel.StateChanged += new EventHandler<StateEventArgs>(coolPanel_StateChanged);
+        }
+
+        void coolPanel_StateChanged(object sender, StateEventArgs e)
+        {
+            if ((Panel.PanelState)e.Data == Panel.PanelState.Open)
+            {
+                coolPanel.SetTextureWithBackground(Content.Load<Texture2D>("WavyEffect1"), true);
+            }
         }
 
         void titleText2_StateChanged(object sender, StateEventArgs e)
@@ -239,8 +247,10 @@ namespace FontEffectsLibSamples
             titleText2.Draw(spriteBatch);
             titleText1.Draw(spriteBatch);
             titleText3.Draw(spriteBatch);
-
+            
             by.Draw(spriteBatch);
+
+            coolPanel.Draw(spriteBatch);
 
             foreach (SlidingFont slidingFont in slidingText)
             {
@@ -248,8 +258,6 @@ namespace FontEffectsLibSamples
             }
 
             insertCoins.Draw(spriteBatch);
-
-            coolPanel.Draw(spriteBatch);
 
             spriteBatch.End();
 
