@@ -38,7 +38,7 @@ namespace FontEffectsLibSamples
         KeyboardState lastKeyboardState;
         KeyboardState currentKeyboardState;
 
-        List<SlidingFont> slidingText;
+        StatefulSequence<SlidingFont> slidingText;
         TexturePanel coolPanel;
 
         public FontEffectsLibSamples()
@@ -123,7 +123,8 @@ namespace FontEffectsLibSamples
             insertCoins.Text.Append("INSERT COINS");
             insertCoins.IsVisible = false;
 
-            slidingText = new List<SlidingFont>();
+            slidingText = new StatefulSequence<SlidingFont>(SlidingFont.FontState.Done, typeof(SlidingFont.FontState));
+            
 
             Vector2 targetPos = new Vector2(505, 400);
             foreach (char letter in "COOL")
@@ -143,15 +144,14 @@ namespace FontEffectsLibSamples
 
             coolPanel = new TexturePanel(Content.Load<Texture2D>("WavyEffect"), new Vector2(120, 60), Vector2.One * .5f, new Vector2(550, 425), new Color(60, 60, 60, 128));
             coolPanel.IsVisible = false;
-            coolPanel.StateChanged += new EventHandler<StateEventArgs>(coolPanel_StateChanged);
+
+
+            slidingText.SequenceReachedMonitoredState += new StatefulSequence<SlidingFont>.MonitoredStateReached(slidingText_SequenceReachedMonitoredState);
         }
 
-        void coolPanel_StateChanged(object sender, StateEventArgs e)
+        void slidingText_SequenceReachedMonitoredState()
         {
-            if ((Panel.PanelState)e.Data == Panel.PanelState.Open)
-            {
-                coolPanel.SetTextureWithBackground(Content.Load<Texture2D>("WavyEffect1"), true);
-            }
+            coolPanel.SetTextureWithBackground(Content.Load<Texture2D>("WavyEffect1"), true);
         }
 
         void titleText2_StateChanged(object sender, StateEventArgs e)
