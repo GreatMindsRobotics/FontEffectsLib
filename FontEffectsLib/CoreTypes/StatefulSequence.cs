@@ -45,7 +45,7 @@ namespace FontEffectsLib.CoreTypes
         protected List<bool> _sequenceCompleted = new List<bool>();
 
         /// <summary>
-        /// Gets a dictionary which stores boolean values in corresponding positions to the <see cref="T:List"/> of <see cref="IStateful"/> objects.
+        /// Gets a dictionary which stores monitored states and their types. Using a <see cref="T:Dictionary"/> object ensures only one state being monitored per type.
         /// </summary>
         public Dictionary<Type, object> MonitoredStates
         {
