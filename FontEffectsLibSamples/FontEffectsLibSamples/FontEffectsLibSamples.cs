@@ -130,7 +130,7 @@ namespace FontEffectsLibSamples
             foreach (char letter in "COOL")
             {
                 slidingText.Add(new SlidingFont(Content.Load<SpriteFont>("SlidingFont"), new Vector2(50, 350), targetPos, 2f, letter.ToString(), Color.Red) { EnableShadow = false, IsVisible = false, TargetTolerance = 0.625f });
-                targetPos.X += 15;
+                targetPos.X += 15; //Magic # - bad idea
             }
 
             targetPos = new Vector2(505, 420);
@@ -139,7 +139,7 @@ namespace FontEffectsLibSamples
             foreach (char letter in "Effects!")
             {
                 slidingText.Add(new SlidingFont(Content.Load<SpriteFont>("SlidingFont"), new Vector2(random.Next(0, GraphicsDevice.Viewport.Width), random.Next(0, GraphicsDevice.Viewport.Height)), targetPos, 1f + (float)random.NextDouble(), letter.ToString(), Color.Red) { EnableShadow = false, IsVisible = false });
-                targetPos.X += 12;
+                targetPos.X += 12; //Magic # - bad idea
             }
 
             coolPanel = new TexturePanel(Content.Load<Texture2D>("WavyEffect"), new Vector2(120, 60), Vector2.One * .5f, new Vector2(550, 425), new Color(60, 60, 60, 128));
