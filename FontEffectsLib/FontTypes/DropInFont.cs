@@ -59,7 +59,7 @@ namespace FontEffectsLib.FontTypes
             _targetPosition = endPosition;
             _dropSpeed = dropSpeed;
             _text = new StringBuilder(text);
-
+            _originalScale = _scale;
             _startingShadowPosition = _shadowPosition;
 
             Reset();
@@ -71,7 +71,7 @@ namespace FontEffectsLib.FontTypes
             _startingPosition = startPosition;
             _targetPosition = endPosition;
             _dropSpeed = dropSpeed;
-
+            _originalScale = _scale;
             _startingShadowPosition = _shadowPosition;
 
             Reset();
@@ -81,6 +81,8 @@ namespace FontEffectsLib.FontTypes
         {
             _position = _startingPosition;
             _shadowPosition = _startingShadowPosition;
+
+            _scale = _originalScale;
 
             changeState(FontState.Drop);
         }
