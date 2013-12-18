@@ -13,7 +13,7 @@ namespace FontEffectsLib.FontTypes
         public event EventHandler<StateEventArgs> StateChanged;
 
         public enum FontState
-        { 
+        {
             Drop,
             Compress,
             Expand,
@@ -22,13 +22,15 @@ namespace FontEffectsLib.FontTypes
 
         protected Vector2 _targetPosition;
         protected Vector2 _dropSpeed;
-        
+        protected Vector2 _startingPosition;
+        protected Vector2 _startingShadowPosition;
+
         //State handling
         protected FontState _state;
 
         //Bounce action
         protected Vector2 _fontSize;
-        protected Vector2 _originalScale;        
+        protected Vector2 _originalScale;
         protected float _step = 0.05f;
         protected Vector2 _targetScale;
 
@@ -53,18 +55,32 @@ namespace FontEffectsLib.FontTypes
         public DropInFont(SpriteFont font, Vector2 startPosition, Vector2 endPosition, Vector2 dropSpeed, String text, Color tintColor)
             : base(font, startPosition, tintColor)
         {
+            _startingPosition = startPosition;
             _targetPosition = endPosition;
             _dropSpeed = dropSpeed;
             _text = new StringBuilder(text);
 
-            changeState(FontState.Drop);
+            _startingShadowPosition = _shadowPosition;
+
+            Reset();
         }
 
         public DropInFont(SpriteFont font, Vector2 startPosition, Vector2 endPosition, Vector2 dropSpeed, String text, Color tintColor, Vector2 shadowPosition, Color shadowColor)
             : base(font, text, startPosition, tintColor, shadowPosition, shadowColor)
         {
+            _startingPosition = startPosition;
             _targetPosition = endPosition;
             _dropSpeed = dropSpeed;
+
+            _startingShadowPosition = _shadowPosition;
+
+            Reset();
+        }
+
+        public void Reset()
+        {
+            _position = _startingPosition;
+            _shadowPosition = _startingShadowPosition;
 
             changeState(FontState.Drop);
         }
@@ -77,7 +93,7 @@ namespace FontEffectsLib.FontTypes
             }
 
             switch (_state)
-            { 
+            {
                 case FontState.Drop:
                     if (_position.X < _targetPosition.X)
                     {
@@ -158,8 +174,8 @@ namespace FontEffectsLib.FontTypes
 
                 case FontState.Done:
                     break;
-            
-            }            
+
+            }
         }
 
         protected virtual void changeState(FontState newState)

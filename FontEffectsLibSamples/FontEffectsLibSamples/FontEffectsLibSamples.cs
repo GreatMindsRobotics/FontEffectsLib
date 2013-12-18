@@ -124,7 +124,6 @@ namespace FontEffectsLibSamples
             insertCoins.IsVisible = false;
 
             slidingText = new StatefulSequence<SlidingFont>(SlidingFont.FontState.Done, typeof(SlidingFont.FontState));
-            
 
             Vector2 targetPos = new Vector2(505, 400);
             foreach (char letter in "COOL")
@@ -152,6 +151,9 @@ namespace FontEffectsLibSamples
         void slidingText_SequenceReachedMonitoredState()
         {
             coolPanel.SetTextureWithBackground(Content.Load<Texture2D>("WavyEffect1"), true);
+
+            //Alex's awesome reset function
+            titleText1.Reset();
         }
 
         void titleText2_StateChanged(object sender, StateEventArgs e)
@@ -223,6 +225,12 @@ namespace FontEffectsLibSamples
             if (insertCoins.IsVisible && ((currentKeyboardState.IsKeyDown(Keys.Space) && lastKeyboardState.IsKeyUp(Keys.Space)) || (currentKeyboardState.IsKeyDown(Keys.Enter) && lastKeyboardState.IsKeyUp(Keys.Enter))))
             {
                 coinsEffect.Play();
+
+                //Alex's awesome reset
+                foreach (SlidingFont slidingFont in slidingText)
+                {
+                    slidingFont.Reset(true);
+                }
             }
 
             coolPanel.Update(gameTime);
