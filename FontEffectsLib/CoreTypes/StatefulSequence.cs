@@ -9,15 +9,15 @@ namespace FontEffectsLib.CoreTypes
     /// A <see cref="T:List"/> of <see cref="IStateful"/> objects that can notify via events when any object in the list reached a particular monitored state.
     /// This class will also notify subscribers when all objects in the list reached their monitored states.
     /// </summary>
-    /// <typeparam name="T">An object type that supports the <see cref="IStateful"/> interface.</typeparam>
-    public class StatefulSequence<T> : List<T> where T : IStateful
+    /// <typeparam name="TTracked">An object type that supports the <see cref="IStateful"/> interface, which this is a collection of.</typeparam>
+    public class StatefulSequence<TTracked> : List<TTracked> where TTracked : IStateful
     {
         /// <summary>
         /// This event delegate is raised whenever any of the <see cref="IStateful"/> objects in this <see cref="T:StatefulSequence"/> reach the monitored state.
         /// </summary>
         /// <typeparam name="T">An object type that supports the <see cref="IStateful"/> interface.</typeparam>
         /// <param name="item">The <see cref="IStateful"/> object that caused the event to be raised.</param>
-        public delegate void MonitoredStateReached<T>(T item);
+        public delegate void MonitoredStateReached<T>(T item) where T : IStateful;
         
         /// <summary>
         /// This event delegate is raised when all <see cref="IStateful"/> objects in this <see cref="T:StatefulSequence"/> reached their monitored states.
@@ -27,7 +27,7 @@ namespace FontEffectsLib.CoreTypes
         /// <summary>
         /// This event is fired whenever any of the <see cref="IStateful"/> objects in this <see cref="T:StatefulSequence"/> reach the monitored state.
         /// </summary>
-        public event MonitoredStateReached<T> ItemReachedMonitoredState;
+        public event MonitoredStateReached<TTracked> ItemReachedMonitoredState;
 
         /// <summary>
         /// This event is fired when all <see cref="IStateful"/> objects in this <see cref="T:StatefulSequence"/> reached their monitored states.
@@ -70,7 +70,7 @@ namespace FontEffectsLib.CoreTypes
         /// Adds an <see cref="IStateful"/> object to the end of this <see cref="T:StatefulSequence"/>
         /// </summary>
         /// <param name="item"><see cref="IStateful"/> object to add to this <see cref="T:StatefulSequence"/></param>
-        public new void Add(T item)
+        public new void Add(TTracked item)
         {
             base.Add(item);
 
@@ -82,9 +82,9 @@ namespace FontEffectsLib.CoreTypes
         /// Adds all <see cref="IStateful"/> objects in the specified <see cref="T:IEnumerable"/> collection to the end of this <see cref="T:StatefulSequence"/>
         /// </summary>
         /// <param name="items"></param>
-        public new void AddRange(IEnumerable<T> items)
+        public new void AddRange(IEnumerable<TTracked> items)
         {
-            foreach (T item in items)
+            foreach (TTracked item in items)
             {
                 this.Add(item);
             }
@@ -96,7 +96,7 @@ namespace FontEffectsLib.CoreTypes
         /// <param name="index">Zero-based index at which to insert this <see cref="IStateful"/> item. 
         /// Current item at this position, and all subsequent items, will be shifted up by one.</param>
         /// <param name="item">The <see cref="IStateful"/> item to insert. </param>
-        public new void Insert(int index, T item)
+        public new void Insert(int index, TTracked item)
         {
             base.Insert(index, item);
 
@@ -106,13 +106,13 @@ namespace FontEffectsLib.CoreTypes
 
         /// <summary>
         /// Inserts all <see cref="IStateful"/> objects in the specified <see cref="T:IEnumerable"/> collection into this <see cref="T:StatefulSequence"/> at the specified index.
-        /// Current item at this position, and all subsequent items, will be shifted up by total number of newly insterted items.</param>
+        /// Current item at this position, and all subsequent items, will be shifted up by total number of newly insterted items.
         /// </summary>
         /// <param name="index">The index at which to insert the new items.</param>
         /// <param name="items">The <see cref="IEnumerable"/> <see cref="Collection"/> of <see cref="IStateful"/> items to add to this <see cref="T:StatefulSequence"/> <see cref="T:List"/>.</param>
-        public new void InsertRange(int index, IEnumerable<T> items)
+        public new void InsertRange(int index, IEnumerable<TTracked> items)
         {
-            foreach (T item in items)
+            foreach (TTracked item in items)
             {
                 this.Insert(index, item);
                 index++;
@@ -123,13 +123,13 @@ namespace FontEffectsLib.CoreTypes
         /// Removes the specified <see cref="IStateful"/> object from this <see cref="T:StatefulSequence"/> <see cref="T:List"/>.
         /// </summary>
         /// <param name="item">The <see cref="IStateful"/> item to remove from this <see cref="T:StatefulSequence"/> <see cref="T:List"/>.</param>
-        public new void Remove(T item)
+        public new void Remove(TTracked item)
         {
             //Unsubscribe event handler
             item.StateChanged -= item_StateChanged;
 
             //Find index and remove from sequenceCompleted List
-            int index = IndexOf((T)item);
+            int index = IndexOf((TTracked)item);
             _sequenceCompleted.RemoveAt(index);
             
             base.Remove(item);
@@ -140,17 +140,17 @@ namespace FontEffectsLib.CoreTypes
             this.Remove(this[index]);            
         }
 
-        public new void RemoveRange(IEnumerable<T> items)
+        public new void RemoveRange(IEnumerable<TTracked> items)
         {
-            foreach (T item in items)
+            foreach (TTracked item in items)
             {
                 this.Remove(item);
             }
         }
 
-        public new void RemoveAll(Predicate<T> match)
+        public new void RemoveAll(Predicate<TTracked> match)
         {
-            foreach (T item in this.FindAll(match))
+            foreach (TTracked item in this.FindAll(match))
             {
                 this.Remove(item);
             }
@@ -165,13 +165,13 @@ namespace FontEffectsLib.CoreTypes
                 if (e.DataType == monitoredState.Key && e.Data.ToString() == monitoredState.Value.ToString())
                 {
                     //Mark this item in SequenceCompleted List
-                    int index = IndexOf((T)sender);
+                    int index = IndexOf((TTracked)sender);
                     _sequenceCompleted[index] = true;
 
                     //Raise event notifying subscribers this item has completed the sequence
                     if (ItemReachedMonitoredState != null)
                     {
-                        ItemReachedMonitoredState((T)sender);
+                        ItemReachedMonitoredState((TTracked)sender);
                     }
 
                     //If all items completed the sequence, raise SequenceReachedMonitoredState event
