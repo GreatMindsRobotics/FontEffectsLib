@@ -41,6 +41,8 @@ namespace FontEffectsLibSamples
         StatefulSequence<SlidingFont> slidingText;
         TexturePanel coolPanel;
 
+        ComplexSprite achievementPanel;
+
         public FontEffectsLibSamples()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -144,6 +146,9 @@ namespace FontEffectsLibSamples
             coolPanel = new TexturePanel(Content.Load<Texture2D>("WavyEffect"), new Vector2(120, 60), Vector2.One * .5f, new Vector2(550, 425), new Color(60, 60, 60, 128));
             coolPanel.IsVisible = false;
 
+            achievementPanel = new ComplexSprite(Vector2.Zero, new GameFont(Content.Load<SpriteFont>("SlidingFont"), "Achievement!", new Vector2(5), Color.Yellow), new GameFont(Content.Load<SpriteFont>("ArcadeFont"), "Insert 5 coins", new Vector2(5, 16), Color.White));
+            //achievementPanel.TintColor = Color.CornflowerBlue;
+            achievementPanel.IsVisible = false;
 
             slidingText.SequenceReachedMonitoredState += new StatefulSequence<SlidingFont>.MonitoredStateReached(slidingText_SequenceReachedMonitoredState);
         }
@@ -199,6 +204,8 @@ namespace FontEffectsLibSamples
             // TODO: Unload any non ContentManager content here
         }
 
+        private int coinsInserted;
+
         /// <summary>
         /// Allows the game to run logic such as updating the world,
         /// checking for collisions, gathering input, and playing audio.
@@ -225,6 +232,11 @@ namespace FontEffectsLibSamples
             if (insertCoins.IsVisible && ((currentKeyboardState.IsKeyDown(Keys.Space) && lastKeyboardState.IsKeyUp(Keys.Space)) || (currentKeyboardState.IsKeyDown(Keys.Enter) && lastKeyboardState.IsKeyUp(Keys.Enter))))
             {
                 coinsEffect.Play();
+                coinsInserted++;
+                if (coinsInserted >= 5)
+                {
+                    achievementPanel.IsVisible = true;
+                }
 
                 //Alex's awesome reset
                 foreach (SlidingFont slidingFont in slidingText)
@@ -234,6 +246,7 @@ namespace FontEffectsLibSamples
             }
 
             coolPanel.Update(gameTime);
+            achievementPanel.Update(gameTime);
 
             base.Update(gameTime);
 
@@ -250,11 +263,14 @@ namespace FontEffectsLibSamples
 
             spriteBatch.Begin();
 
+            
+
             bgSprite.Draw(spriteBatch);
 
             titleText2.Draw(spriteBatch);
             titleText1.Draw(spriteBatch);
             titleText3.Draw(spriteBatch);
+            
             
             by.Draw(spriteBatch);
 
@@ -266,6 +282,8 @@ namespace FontEffectsLibSamples
             }
 
             insertCoins.Draw(spriteBatch);
+
+            achievementPanel.Draw(spriteBatch);
 
             spriteBatch.End();
 
