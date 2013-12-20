@@ -9,6 +9,16 @@ namespace FontEffectsLib.CoreTypes
 {
     public abstract class BaseGameObject : ISprite
     {
+        public event EventHandler VisibilityStateChanged;
+
+        protected void FireVisibilityStateChangedEvent()
+        {
+            if (VisibilityStateChanged != null)
+            {
+                VisibilityStateChanged(this, EventArgs.Empty);
+            }
+        }
+
         protected Vector2 _position;
         protected Color _tintColor;
         protected float _rotation;
@@ -22,10 +32,17 @@ namespace FontEffectsLib.CoreTypes
 
         public virtual bool IsVisible
         {
-            get{return _isVisible;}
-            set{_isVisible = value;}
+            get { return _isVisible; }
+            set
+            {
+                if (value != _isVisible)
+                {
+                    _isVisible = value;
+                    FireVisibilityStateChangedEvent();
+                }
+            }
         }
-        
+
         public virtual Vector2 Position
         {
             get { return _position; }

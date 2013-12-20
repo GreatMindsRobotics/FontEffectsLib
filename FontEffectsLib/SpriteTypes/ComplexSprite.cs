@@ -48,6 +48,7 @@ namespace FontEffectsLib.SpriteTypes
                 drawable.Update(gameTime);
             }
         }
+        
 
         /// <summary>
         /// Draws all of the subsprites of this <see cref="ComplexSprite"/> to the specified <see cref="SpriteBatch"/>.
