@@ -82,6 +82,10 @@ namespace FontEffectsLib.CoreTypes
         /// <param name="item">The <see cref="ISprite"/> to add.</param>
         public void Add(ISprite item)
         {
+            if (item == null)
+            {
+                throw new ArgumentNullException("item");
+            }
             _sprites.Add(item);
         }
 
@@ -100,11 +104,19 @@ namespace FontEffectsLib.CoreTypes
         /// <returns>Whether this <see cref="SpriteManagerComponent"/> contains the specified <see cref="ISprite"/>.</returns>
         public bool Contains(ISprite item)
         {
+            if (item == null)
+            {
+                throw new ArgumentNullException("item");
+            }
             return _sprites.Contains(item);
         }
 
         public void CopyTo(ISprite[] array, int arrayIndex)
         {
+            if (array == null)
+            {
+                throw new ArgumentNullException("array");
+            }
             _sprites.CopyTo(array, arrayIndex);
         }
 
@@ -126,6 +138,10 @@ namespace FontEffectsLib.CoreTypes
 
         public bool Remove(ISprite item)
         {
+            if (item == null)
+            {
+                throw new ArgumentNullException("item");
+            }
             return _sprites.Remove(item);
         }
 
