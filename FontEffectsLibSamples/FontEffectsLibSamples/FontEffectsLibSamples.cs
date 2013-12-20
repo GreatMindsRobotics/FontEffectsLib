@@ -41,7 +41,9 @@ namespace FontEffectsLibSamples
         StatefulSequence<SlidingFont> slidingText;
         TexturePanel coolPanel;
 
-        ComplexSprite achievementPanel;
+        AchievementPanel insertFive;
+        AchievementPanel donateHundred;
+        AchievementPanel noCoinSpam;
 
         public FontEffectsLibSamples()
         {
@@ -61,6 +63,7 @@ namespace FontEffectsLibSamples
             
             viewport = GraphicsDevice.Viewport;
             screenSize = new Vector2(viewport.Width, viewport.Height);
+            CoinsInserted = 0;
 
             base.Initialize();
         }
@@ -146,12 +149,19 @@ namespace FontEffectsLibSamples
             coolPanel = new TexturePanel(Content.Load<Texture2D>("WavyEffect"), new Vector2(120, 60), Vector2.One * .5f, new Vector2(550, 425), new Color(60, 60, 60, 128));
             coolPanel.IsVisible = false;
 
-            achievementPanel = new ComplexSprite(Vector2.Zero, new GameFont(Content.Load<SpriteFont>("SlidingFont"), "Achievement!", new Vector2(5), Color.Yellow), new GameFont(Content.Load<SpriteFont>("ArcadeFont"), "Insert 5 coins", new Vector2(12f, 22), Color.White));
-            //achievementPanel.TintColor = Color.CornflowerBlue;
-            achievementPanel.IsVisible = false;
+            insertFive = new AchievementPanel(0, Content.Load<SpriteFont>("SlidingFont"), Content.Load<SpriteFont>("ArcadeFont"), "Insert 5 coins", GraphicsDevice);
+            insertFive.Condition = AchievementPanel.AreFiveCoinsInsert;
+
+            donateHundred = new AchievementPanel(0, Content.Load<SpriteFont>("SlidingFont"), Content.Load<SpriteFont>("ArcadeFont"), "Donate $100 to GMR", GraphicsDevice);
+            donateHundred.Condition = AchievementPanel.AreHundredDollarsDonated;
+
+            noCoinSpam = new AchievementPanel(0, Content.Load<SpriteFont>("SlidingFont"), Content.Load<SpriteFont>("ArcadeFont"), "Don't insert coins for one minute", GraphicsDevice);
+            noCoinSpam.Position = new Vector2(GraphicsDevice.Viewport.Width - noCoinSpam.Width, noCoinSpam.Position.Y);
+            noCoinSpam.Condition = AchievementPanel.IsNoCoinsInsertedAtOneMinute;
 
             slidingText.SequenceReachedMonitoredState += new StatefulSequence<SlidingFont>.MonitoredStateReached(slidingText_SequenceReachedMonitoredState);
         }
+        
 
         void slidingText_SequenceReachedMonitoredState()
         {
@@ -204,7 +214,7 @@ namespace FontEffectsLibSamples
             // TODO: Unload any non ContentManager content here
         }
 
-        private int coinsInserted;
+        internal static int CoinsInserted;
 
         /// <summary>
         /// Allows the game to run logic such as updating the world,
@@ -232,11 +242,8 @@ namespace FontEffectsLibSamples
             if (insertCoins.IsVisible && ((currentKeyboardState.IsKeyDown(Keys.Space) && lastKeyboardState.IsKeyUp(Keys.Space)) || (currentKeyboardState.IsKeyDown(Keys.Enter) && lastKeyboardState.IsKeyUp(Keys.Enter))))
             {
                 coinsEffect.Play();
-                coinsInserted++;
-                if (coinsInserted >= 5)
-                {
-                    achievementPanel.IsVisible = true;
-                }
+                CoinsInserted++;
+                
 
                 //Alex's awesome reset
                 foreach (SlidingFont slidingFont in slidingText)
@@ -246,7 +253,9 @@ namespace FontEffectsLibSamples
             }
 
             coolPanel.Update(gameTime);
-            achievementPanel.Update(gameTime);
+            insertFive.Update(gameTime);
+            donateHundred.Update(gameTime);
+            noCoinSpam.Update(gameTime);
 
             base.Update(gameTime);
 
@@ -283,7 +292,9 @@ namespace FontEffectsLibSamples
 
             insertCoins.Draw(spriteBatch);
 
-            achievementPanel.Draw(spriteBatch);
+            insertFive.Draw(spriteBatch);
+            donateHundred.Draw(spriteBatch);
+            noCoinSpam.Draw(spriteBatch);
 
             spriteBatch.End();
 
