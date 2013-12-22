@@ -23,7 +23,7 @@ namespace FontEffectsLib.FontTypes
         protected FontState _state;
 
         protected Vector2 _targetPosition;
-        protected Vector2 _startingPostion;
+        protected Vector2 _startingPosition;
         protected float _slideSpeed;
 
         //Calculations
@@ -65,7 +65,7 @@ namespace FontEffectsLib.FontTypes
         public SlidingFont(SpriteFont font, Vector2 startPosition, Vector2 endPosition, float slideSpeed, String text, Color tintColor)
             : base(font, startPosition, tintColor)
         {
-            _startingPostion = startPosition;
+            _startingPosition = startPosition;
             _targetPosition = endPosition;
             _slideSpeed = slideSpeed;
             _text = new StringBuilder(text);
@@ -78,7 +78,7 @@ namespace FontEffectsLib.FontTypes
         public SlidingFont(SpriteFont font, Vector2 startPosition, Vector2 endPosition, float slideSpeed, String text, Color tintColor, Vector2 shadowPosition, Color shadowColor)
             : base(font, text, startPosition, tintColor, shadowPosition, shadowColor)
         {
-            _startingPostion = startPosition;
+            _startingPosition = startPosition;
             _targetPosition = endPosition;
             _slideSpeed = slideSpeed;
 
@@ -107,7 +107,7 @@ namespace FontEffectsLib.FontTypes
         public void Reset()
         {
             _isVisible = false;
-            _position = _startingPostion;
+            _position = _startingPosition;
             changeState(FontState.Ready);
         }
 
