@@ -9,27 +9,27 @@ namespace FontEffectsLib.FontTypes
 {
     public class AccelDropInFont : DropInFont
     {
-        private Vector2 accel;
-        private TimeSpan accelDelayTarget;
-        private Vector2 maxDropSpeed;
+        private Vector2 _accel;
+        private TimeSpan _accelDelayTarget;
+        private Vector2 _maxDropSpeed;
 
-        public Vector2 _accel
+        public Vector2 Accel
         {
-            get { return accel; }
-            set { accel = value; }
+            get { return _accel; }
+            set { _accel = value; }
         }
 
-        public TimeSpan _accelDelayTarget
+        public TimeSpan AccelDelayTarget
         {
-            get { return accelDelayTarget; }
-            set { accelDelayTarget = value; }
+            get { return _accelDelayTarget; }
+            set { _accelDelayTarget = value; }
         }
 
 
-        public Vector2 _maxDropSpeed
+        public Vector2 MaxDropSpeed
         {
-            get { return maxDropSpeed; }
-            set { maxDropSpeed = value; }
+            get { return _maxDropSpeed; }
+            set { _maxDropSpeed = value; }
         }
 
         TimeSpan accelDelay = new TimeSpan(0);
@@ -44,51 +44,51 @@ namespace FontEffectsLib.FontTypes
         public AccelDropInFont(SpriteFont font, Vector2 startPosition, Vector2 endPosition, Vector2 dropSpeed, String text, Color tintColor, Vector2 accel)
             : base(font, startPosition, endPosition, dropSpeed, text, tintColor)
         {
-            _accel = accel;
+            Accel = accel;
 
-            accelDelayTarget = new TimeSpan(0, 0, 0, 0, 250);
+            _accelDelayTarget = new TimeSpan(0, 0, 0, 0, 250);
 
-            _maxDropSpeed = new Vector2(int.MaxValue, int.MaxValue);
+            MaxDropSpeed = new Vector2(float.MaxValue);
         }
 
         public AccelDropInFont(SpriteFont font, Vector2 startPosition, Vector2 endPosition, Vector2 dropSpeed, String text, Color tintColor, Vector2 shadowPosition, Color shadowColor, Vector2 accel)
             : base(font, startPosition, endPosition, dropSpeed, text, tintColor, shadowPosition, shadowColor)
         {
-            _accel = accel;
+            Accel = accel;
 
-            accelDelayTarget = new TimeSpan(0, 0, 0, 0, 250);
+            _accelDelayTarget = new TimeSpan(0, 0, 0, 0, 250);
 
-            _maxDropSpeed = new Vector2(int.MaxValue, int.MaxValue);
+            MaxDropSpeed = new Vector2(float.MaxValue);
         }
 
         public AccelDropInFont(SpriteFont font, Vector2 startPosition, Vector2 endPosition, Vector2 dropSpeed, String text, Color tintColor, Vector2 shadowPosition, Color shadowColor, Vector2 accel, TimeSpan accelDelayTarget)
             : base(font, startPosition, endPosition, dropSpeed, text, tintColor, shadowPosition, shadowColor)
         {
-            _accel = accel;
+            Accel = accel;
 
-            _accelDelayTarget = accelDelayTarget;
+            AccelDelayTarget = accelDelayTarget;
 
-            _maxDropSpeed = new Vector2(int.MaxValue, int.MaxValue);
+            MaxDropSpeed = new Vector2(float.MaxValue);
         }
 
         public AccelDropInFont(SpriteFont font, Vector2 startPosition, Vector2 endPosition, Vector2 dropSpeed, String text, Color tintColor, Vector2 shadowPosition, Color shadowColor, Vector2 accel, Vector2 maxDropSpeed)
             : base(font, startPosition, endPosition, dropSpeed, text, tintColor, shadowPosition, shadowColor)
         {
-            _accel = accel;
+            Accel = accel;
 
-            _accelDelayTarget = new TimeSpan(0, 0, 0, 0, 250);
+            AccelDelayTarget = new TimeSpan(0, 0, 0, 0, 250);
 
-            _maxDropSpeed = maxDropSpeed;
+            MaxDropSpeed = maxDropSpeed;
         }
 
         public AccelDropInFont(SpriteFont font, Vector2 startPosition, Vector2 endPosition, Vector2 dropSpeed, String text, Color tintColor, Vector2 shadowPosition, Color shadowColor, Vector2 accel, TimeSpan accelDelayTarget, Vector2 maxDropSpeed)
             : base(font, startPosition, endPosition, dropSpeed, text, tintColor, shadowPosition, shadowColor)
         {
-            _accel = accel;
+            Accel = accel;
 
-            _accelDelayTarget = accelDelayTarget;
+            AccelDelayTarget = accelDelayTarget;
 
-            _maxDropSpeed = maxDropSpeed;
+            MaxDropSpeed = maxDropSpeed;
         }
 
 
@@ -103,13 +103,13 @@ namespace FontEffectsLib.FontTypes
             {
                 case FontState.Drop:
 
-                    if (_maxDropSpeed.Y > _dropSpeed.Y && _maxDropSpeed.X > _dropSpeed.X)
+                    if (MaxDropSpeed.Y > _dropSpeed.Y && MaxDropSpeed.X > _dropSpeed.X)
                     {
                         accelDelay += gameTime.ElapsedGameTime;
 
-                        if (accelDelay >= _accelDelayTarget)
+                        if (accelDelay >= AccelDelayTarget)
                         {
-                            _dropSpeed *= _accel;
+                            _dropSpeed *= Accel;
                             accelDelay = accelDelayReset;
                         }
                     }

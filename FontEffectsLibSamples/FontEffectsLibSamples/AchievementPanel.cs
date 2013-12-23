@@ -19,6 +19,8 @@ namespace FontEffectsLibSamples
             return FontEffectsLibSamples.CoinsInserted == 5;
         }
 
+        public event EventHandler AchievementEarned;
+
         public static bool IsNoCoinsInsertedAtOneMinute(GameTime currentGameTime)
         {
             return FontEffectsLibSamples.CoinsInserted == 0 && currentGameTime.TotalGameTime >= TimeSpan.FromMinutes(1);
@@ -118,6 +120,10 @@ namespace FontEffectsLibSamples
             if (_panelState == PanelState.Sliding && Position.Y > 0)
             {
                 Velocity = Vector2.Zero;
+                if (AchievementEarned != null)
+                {
+                    AchievementEarned(this, EventArgs.Empty);
+                }
                 ChangeState(PanelState.Fading);
             }
 

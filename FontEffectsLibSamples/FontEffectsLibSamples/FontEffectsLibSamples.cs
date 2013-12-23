@@ -115,7 +115,7 @@ namespace FontEffectsLibSamples
             by.SetCenterAsOrigin();
             by.ShadowPosition = new Vector2(by.Position.X - 4, by.Position.Y + 4);
             by.ShadowColor = Color.Black;
-            by._maxDropSpeed = new Vector2(15, 15);
+            by.MaxDropSpeed = new Vector2(15, 15);
 
             crashEffect = Content.Load<SoundEffect>("Crash");
 
