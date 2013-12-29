@@ -175,10 +175,7 @@ namespace FontEffectsLib.FontTypes
 
         private void adjustColor(ref Color adjustMe, Color target, float alpha)
         {
-            adjustMe.R = (byte)MathHelper.Clamp(target.R * alpha, 0, target.R);
-            adjustMe.G = (byte)MathHelper.Clamp(target.G * alpha, 0, target.G);
-            adjustMe.B = (byte)MathHelper.Clamp(target.B * alpha, 0, target.B);
-            adjustMe.A = (byte)MathHelper.Clamp(target.A * alpha, 0, target.A);
+            adjustMe = target * alpha;
         }
 
         protected virtual void changeState(FontState newState)
