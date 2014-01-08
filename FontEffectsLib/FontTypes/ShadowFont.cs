@@ -12,6 +12,26 @@ namespace FontEffectsLib.FontTypes
         protected Color _shadowColor;
         protected bool _enableShadow;
         protected Vector2 _shadowPosition;
+        protected bool _usingRelativePosition = true;
+
+        protected Vector2 _shadowSize = new Vector2(4);
+
+        /// <summary>
+        /// Relative shadow position
+        /// </summary>
+        public virtual Vector2 ShadowSize
+        {
+            get { return _shadowSize; }
+            set
+            {
+                if (_shadowSize != value)
+                {
+                    _shadowSize = value;
+                    _usingRelativePosition = true;
+                }
+            }
+        }
+        
 
         protected const float _defaultShadowSize = 4;
 
@@ -23,8 +43,8 @@ namespace FontEffectsLib.FontTypes
 
         public virtual Vector2 ShadowPosition
         {
-            get { return _shadowPosition; }
-            set { _shadowPosition = value; }
+            get { return _usingRelativePosition ? _position + _shadowSize : _shadowPosition; }
+            set { _shadowPosition = value; _usingRelativePosition = false; }
         }
 
         public virtual bool EnableShadow
@@ -56,7 +76,7 @@ namespace FontEffectsLib.FontTypes
 
              if (_enableShadow && _text != null)
              {
-                spriteBatch.DrawString(_font, _text, _shadowPosition, _shadowColor, _rotation, _origin, _scale, _effects, _layerDepth);
+                spriteBatch.DrawString(_font, _text, ShadowPosition, _shadowColor, _rotation, _origin, _scale, _effects, _layerDepth);
              }
 
              base.Draw(spriteBatch);
