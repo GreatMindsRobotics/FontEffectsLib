@@ -43,7 +43,7 @@ namespace FontEffectsLib.FontTypes
 
         public virtual Vector2 ShadowPosition
         {
-            get { return _usingRelativePosition ? _position + _shadowSize : _shadowPosition; }
+            get { return _usingRelativePosition ? Position + _shadowSize : _shadowPosition; }
             set { _shadowPosition = value; _usingRelativePosition = false; }
         }
 
@@ -62,7 +62,7 @@ namespace FontEffectsLib.FontTypes
          public ShadowFont(SpriteFont font, String text, Vector2 position, Color tintColor, Vector2 shadowPosition, Color shadowColor)
             : base(font, text, position, tintColor)
         {
-            _shadowPosition = shadowPosition;
+            ShadowPosition = shadowPosition;
             _enableShadow = true;
             _shadowColor = shadowColor;
         }
