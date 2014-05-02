@@ -41,7 +41,7 @@ These are the creatable types provided by the library. They are located in the F
 All sprites inherit from **BaseGameObject**, the base for renderable types in this library.
 
 * **GameSprite**: Basic sprite; represents a renderable **Texture2D**. 
-* **ComplexSprite**: A sprite that represents multiple grouped **BaseGameObject**s that are rendered with position relative to the **ComplexSprite**.
+* **ComplexSprite**: A sprite that represents multiple grouped game objects that are rendered with position relative to the ComplexSprite.
 
 
 Code Samples
