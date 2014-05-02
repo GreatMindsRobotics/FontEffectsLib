@@ -10,6 +10,11 @@ using FontEffectsLib.CoreTypes;
 
 namespace FontEffectsLibSamples
 {
+    /// <summary>
+    /// Example implementation of ComplexSprite.
+    /// Uses 3 sprites: An "Achievement!" title, a description text field, and a black background.
+    /// Also raises events upon state change.
+    /// </summary>
     public class AchievementPanel : ComplexSprite, IStateful
     {
         public delegate bool ConditionChecker(GameTime currentGameTime);
@@ -36,6 +41,7 @@ namespace FontEffectsLibSamples
         public AchievementPanel(float startX, SpriteFont title, SpriteFont desc, string achievementDesc, GraphicsDevice dev)
             : base(Vector2.Zero)
         {
+            // Create "Achievement!" and description GameFonts
             GameFont titleObj = new GameFont(title, "Achievement!", new Vector2(5), Color.Yellow) { LayerDepth = 0.5f };
             GameFont descObj = new GameFont(desc, achievementDesc, new Vector2(2, titleObj.Size.Y + 5 + 4.5f), Color.White) { LayerDepth = 0.5f };
             Subsprites.Add(titleObj);
@@ -44,6 +50,8 @@ namespace FontEffectsLibSamples
             int achievePanelWidth = -1;
             int achievePanelHeight = -1;
 
+
+            // Positioning logic for text elements
             foreach (var spr in Subsprites)
             {
                 Vector2 size = Vector2.Zero;
@@ -75,10 +83,9 @@ namespace FontEffectsLibSamples
             titleObj.Position = new Vector2(achievePanelWidth / 2 - (titleObj.Size.X / 2), titleObj.Position.Y);
             descObj.Position = new Vector2(achievePanelWidth / 2 - (descObj.Size.X / 2), descObj.Position.Y);
 
-            Subsprites.Add(GameSprite.CreateSolidColor(Vector2.Zero, achievePanelWidth + 5, achievePanelHeight + 10, Color.Black, dev));
-            Subsprites[Subsprites.Count - 1].LayerDepth = 1;
-            Subsprites.Insert(0, Subsprites[Subsprites.Count - 1]);
-            Subsprites.RemoveAt(Subsprites.Count - 1);
+            // Create a solid color background
+            Subsprites.Insert(0, GameSprite.CreateSolidColor(Vector2.Zero, achievePanelWidth + 5, achievePanelHeight + 10, Color.Black, dev));
+            Subsprites[0].LayerDepth = 1;
 
             Position = new Vector2(startX, -achievePanelHeight);
             IsVisible = false;
