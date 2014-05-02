@@ -21,8 +21,8 @@ These are the core interfaces, classes and extensions in this library. They are 
 The extensions methods in the static **Extensions** class are generic helper methods for common tasks. 
 
 #### Viewport:
-* **Viewport.HalfWidth**: This static method returns center of the screen on the X-axis
-* **Viewport.HalfHeight**: This static method returns center of the screen on the Y-axis
+* **Viewport.HalfWidth()**: This static method returns center of the screen on the X-axis (the width divided by two)
+* **Viewport.HalfHeight()**: This static method returns center of the screen on the Y-axis (the height divided by two)
 
 
 Game Objects
@@ -38,19 +38,23 @@ These are the creatable types provided by the library. They are located in the F
 * **SlidingFont**: Have your text slide in to it's target position, starting out fast and later slowing down. This class implements **IStateful**, raising events on *Ready*, *Sliding*, and *Done* state transitions.
 
 ### Sprites:
-* **GameSprite**: Basic sprite; inherits from **BaseGameObject**
-* **ComplexSprite**: *Under development*...
+All sprites inherit from **BaseGameObject**, the base for renderable types in this library.
+
+* **GameSprite**: Basic sprite; represents a renderable **Texture2D**. 
+* **ComplexSprite**: A sprite that represents multiple grouped **BaseGameObject**s that are rendered with position relative to the **ComplexSprite**.
 
 
 Code Samples
 ------------
-Take a look at the **FontEffectsLibSamples** project.
+The **FontEffectsLibSamples** project contains useful, documented code samples demonstrating usage of **FontEffectsLib**.
+
+_Documentation in progress_
 
 
 License
 --------
-Copyright (c) 2013 <a href="http://www.buildcoolrobots.com">Great Minds Robotics</a>
+Copyright (c) 2013-2014 <a href="http://www.buildcoolrobots.com">Great Minds Robotics</a> and contributors.
 
-This software is released under the terms of the <a href="http://opensource.org/licenses/MIT">MIT License</a>
+This software is released under the terms of the [MIT License](http://opensource.org/licenses/MIT).
 
 
