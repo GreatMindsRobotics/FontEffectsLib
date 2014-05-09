@@ -89,7 +89,7 @@ namespace FontEffectsLibSamples
 
             Vector2 titleText2Pos = new Vector2(titleText1.Position.X + titleText1.Size.X / 2, viewport.HalfHeight() + titleText1.Size.Y / 4);
             titleText2 = new FadingFont(Content.Load<SpriteFont>("GameFont"), titleText2Pos, Color.Orange);
-            titleText2.Text.Append("Robotics");
+            titleText2.Text.Append("Hi Stan");
             titleText2.FadeStep /= 5f;
             titleText2.StateChanged += new EventHandler<StateEventArgs>(titleText2_StateChanged);
             titleText2.Fade = false;
@@ -98,10 +98,10 @@ namespace FontEffectsLibSamples
             titleText2.SetCenterAsOrigin();
 
             titleText1.Text.Clear();
-            titleText1.Text.Append("Great ");
+            titleText1.Text.Append("Was ");
 
             Vector2 titleText3Pos = new Vector2(titleText1.Position.X + titleText1.Size.X / 2, -2000);
-            titleText3 = new DropInFont(Content.Load<SpriteFont>("GameFont"), titleText3Pos, screenSize / 2, new Vector2(0, 20), "Minds", Color.OrangeRed);
+            titleText3 = new DropInFont(Content.Load<SpriteFont>("GameFont"), titleText3Pos, screenSize / 2, new Vector2(0, 20), "Here", Color.OrangeRed);
             titleText3.TargetPosition = titleText1.TargetPosition;
             titleText3.SetCenterAsOrigin();
             titleText3.ShadowPosition = new Vector2(titleText3.Position.X - 4, titleText3.Position.Y + 4);
@@ -110,7 +110,7 @@ namespace FontEffectsLibSamples
             titleText3.Tag = GameTags.StartTitleFadeIn;
 
             Vector2 byPos = new Vector2(titleText1.Position.X - 100, -1000);
-            by = new AccelDropInFont(Content.Load<SpriteFont>("GameFont"), byPos, screenSize / 2, new Vector2(0, 5), "By:", Color.Orange, new Vector2(0, 1.5f));
+            by = new AccelDropInFont(Content.Load<SpriteFont>("GameFont"), byPos, screenSize / 2, new Vector2(0, 5), "Ben:", Color.Orange, new Vector2(0, 1.5f));
             by.TargetPosition = titleText1.TargetPosition - new Vector2(100, 100);
             by.SetCenterAsOrigin();
             by.ShadowPosition = new Vector2(by.Position.X - 4, by.Position.Y + 4);

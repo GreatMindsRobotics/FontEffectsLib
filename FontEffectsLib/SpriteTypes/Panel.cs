@@ -70,6 +70,22 @@ namespace FontEffectsLib.SpriteTypes
         protected Vector2 _minScale;
 
         /// <summary>
+        /// The size of the panel
+        /// </summary>
+        protected Vector2 _size;
+
+        /// <summary>
+        /// Gets the size of this panel
+        /// </summary>
+        public Vector2 Size
+        {
+            get
+            {
+                return _size;
+            }
+        }
+
+        /// <summary>
         /// Creates an expandable/collapsable panel
         /// </summary>
         /// <param name="graphics">Graphics device</param>
@@ -80,6 +96,8 @@ namespace FontEffectsLib.SpriteTypes
         public Panel(GraphicsDevice graphics, Vector2 size, Vector2 speed, Vector2 position, Color color)
             : base(new Texture2D(graphics, (int)size.X, (int)size.Y), position, color)
         {
+
+            _size = size;
             _state = PanelState.Collapsed;
             _speed = speed;
             _minScale = new Vector2(1f / size.X, 1f / size.Y);
