@@ -70,20 +70,20 @@ namespace FontEffectsLib.SpriteTypes
         protected Vector2 _minScale;
 
         /// <summary>
-        /// The size of the panel
-        /// </summary>
-        protected Vector2 _size;
-
-        /// <summary>
-        /// Gets the size of this panel
+        /// Gets the size of this panel in it's current state (changes while the panel expands / collapses)
         /// </summary>
         public Vector2 Size
         {
             get
             {
-                return _size;
+                return new Vector2(_texture.Width, _texture.Height) * _scale;
             }
         }
+
+        /// <summary>
+        /// Get the size of this panel when it's fully expanded (Open state)
+        /// </summary>
+        public Vector2 MaxSize { get; protected set; }
 
         /// <summary>
         /// Creates an expandable/collapsable panel
@@ -97,7 +97,7 @@ namespace FontEffectsLib.SpriteTypes
             : base(new Texture2D(graphics, (int)size.X, (int)size.Y), position, color)
         {
 
-            _size = size;
+            MaxSize = size;
             _state = PanelState.Collapsed;
             _speed = speed;
             _minScale = new Vector2(1f / size.X, 1f / size.Y);
@@ -218,5 +218,6 @@ namespace FontEffectsLib.SpriteTypes
                 StateChanged(this, new StateEventArgs(typeof(PanelState), panelState));
             }
         }
+
     }
 }
