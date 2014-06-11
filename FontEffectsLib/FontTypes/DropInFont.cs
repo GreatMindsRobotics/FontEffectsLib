@@ -178,6 +178,7 @@ namespace FontEffectsLib.FontTypes
                     break;
 
             }
+            base.Update(gameTime);
         }
 
         protected virtual void changeState(FontState newState)

@@ -300,7 +300,7 @@ namespace FontEffectsLib.CoreTypes
         }
 
         /// <summary>Retrieves a string representation of the current object.</summary>
-        public override string ToString(IFormatProvider formatter)
+        public string ToString(IFormatProvider formatter)
         {
             object[] str = new object[] { this.X.ToString(formatter), this.Y.ToString(formatter), this.Width.ToString(formatter), this.Height.ToString(formatter) };
             return string.Format(formatter, "{{X:{0} Y:{1} Width:{2} Height:{3}}}", str);

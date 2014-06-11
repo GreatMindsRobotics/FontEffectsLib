@@ -140,7 +140,7 @@ namespace FontEffectsLib.CoreTypes
             this.Remove(this[index]);            
         }
 
-        public new void RemoveRange(IEnumerable<TTracked> items)
+        public void RemoveRange(IEnumerable<TTracked> items)
         {
             foreach (TTracked item in items)
             {

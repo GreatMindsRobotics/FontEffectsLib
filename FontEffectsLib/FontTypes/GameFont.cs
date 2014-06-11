@@ -5,6 +5,7 @@ using System.Text;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using FontEffectsLib.CoreTypes;
+using Microsoft.Xna.Framework.Input;
 
 namespace FontEffectsLib.FontTypes
 {
@@ -12,6 +13,24 @@ namespace FontEffectsLib.FontTypes
     {
         protected SpriteFont _font;
         protected StringBuilder _text;
+
+        //For efficiency, hitbox is only updated in property get. Sub-classes must access this value via the property
+        private RectangleF _hitBox;
+
+        /// <summary>
+        /// Bounding box for this GameFont. Supports floating points.
+        /// </summary>
+        public RectangleF HitBox
+        {
+            get
+            {
+                _hitBox.X = _position.X - _origin.X;
+                _hitBox.Y = _position.Y - _origin.Y;
+                _hitBox.Width = Size.X;
+                _hitBox.Height = Size.Y;
+                return _hitBox;
+            }
+        }
 
         public virtual SpriteFont Font
         {
@@ -45,6 +64,7 @@ namespace FontEffectsLib.FontTypes
 
             _font = font;
             _text = new StringBuilder(text);
+            _hitBox = new RectangleF(position.X-_origin.X, position.Y-_origin.Y, Size.X, Size.Y);
         }
 
         public override void SetCenterAsOrigin()
@@ -62,7 +82,7 @@ namespace FontEffectsLib.FontTypes
 
         public override void Update(GameTime gameTime)
         {
-            //Does nothing, intended for implementation by subclass
+
         }
 
         public override void Draw(SpriteBatch spriteBatch)

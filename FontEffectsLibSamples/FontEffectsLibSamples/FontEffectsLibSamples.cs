@@ -45,6 +45,8 @@ namespace FontEffectsLibSamples
         AchievementPanel donateHundred;
         AchievementPanel noCoinSpam;
 
+        MouseState currentMS;
+
         public FontEffectsLibSamples()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -224,7 +226,7 @@ namespace FontEffectsLibSamples
         protected override void Update(GameTime gameTime)
         {
             currentKeyboardState = Keyboard.GetState();
-
+            currentMS = Mouse.GetState();
             titleText1.Update(gameTime);
             titleText2.Update(gameTime);
             titleText3.Update(gameTime);
@@ -256,7 +258,6 @@ namespace FontEffectsLibSamples
             insertFive.Update(gameTime);
             donateHundred.Update(gameTime);
             noCoinSpam.Update(gameTime);
-
             base.Update(gameTime);
 
             lastKeyboardState = currentKeyboardState;
@@ -284,7 +285,7 @@ namespace FontEffectsLibSamples
             by.Draw(spriteBatch);
 
             coolPanel.Draw(spriteBatch);
-
+            spriteBatch.DrawString(titleText1.Font, string.Format("X: {0} Y: {1}", currentMS.X, currentMS.Y), Vector2.Zero, Color.White);
             foreach (SlidingFont slidingFont in slidingText)
             {
                 slidingFont.Draw(spriteBatch);

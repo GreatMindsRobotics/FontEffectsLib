@@ -143,6 +143,7 @@ namespace FontEffectsLib.FontTypes
                     }
                     break;
             }
+            base.Update(gameTime);
         }
 
         protected float _targetTolerance = 0.4825f;

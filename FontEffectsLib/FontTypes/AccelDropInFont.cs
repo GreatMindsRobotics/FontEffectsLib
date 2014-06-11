@@ -194,6 +194,7 @@ namespace FontEffectsLib.FontTypes
                     break;
 
             }
+            base.Update(gameTime);
         }
     }
 }

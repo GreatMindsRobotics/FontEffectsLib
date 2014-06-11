@@ -170,7 +170,7 @@ namespace FontEffectsLib.FontTypes
                     changeState(FontState.NotFading);
                     return;
             }
-
+            base.Update(gameTime);
         }
 
         private void adjustColor(ref Color adjustMe, Color target, float alpha)
