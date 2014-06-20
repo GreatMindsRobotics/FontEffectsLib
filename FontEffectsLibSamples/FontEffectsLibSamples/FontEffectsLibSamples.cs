@@ -47,6 +47,8 @@ namespace FontEffectsLibSamples
 
         MouseState currentMS;
 
+        TypingFont typingText;
+
         public FontEffectsLibSamples()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -162,6 +164,15 @@ namespace FontEffectsLibSamples
             noCoinSpam.Condition = AchievementPanel.IsNoCoinsInsertedAtOneMinute;
 
             slidingText.SequenceReachedMonitoredState += new StatefulSequence<SlidingFont>.MonitoredStateReached(slidingText_SequenceReachedMonitoredState);
+
+            typingText = new TypingFont(Content.Load<SpriteFont>("ArcadeFont"), Vector2.Zero, Color.Black, "Typing text here", 200);
+            typingText.StateChanged += new EventHandler<StateEventArgs>(typingText_StateChanged);
+            typingText.Start();
+        }
+
+        void typingText_StateChanged(object sender, StateEventArgs e)
+        {
+            
         }
         
 
@@ -230,6 +241,7 @@ namespace FontEffectsLibSamples
             titleText1.Update(gameTime);
             titleText2.Update(gameTime);
             titleText3.Update(gameTime);
+            typingText.Update(gameTime);
 
             by.Update(gameTime);
 
@@ -296,7 +308,7 @@ namespace FontEffectsLibSamples
             insertFive.Draw(spriteBatch);
             donateHundred.Draw(spriteBatch);
             noCoinSpam.Draw(spriteBatch);
-
+            typingText.Draw(spriteBatch);
             spriteBatch.End();
 
             base.Draw(gameTime);

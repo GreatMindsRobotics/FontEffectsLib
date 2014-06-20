@@ -75,6 +75,7 @@
     <Compile Include="FontTypes\GameFont.cs" />
     <Compile Include="FontTypes\ShadowFont.cs" />
     <Compile Include="FontTypes\SlidingFont.cs" />
+    <Compile Include="FontTypes\TypingFont.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SpriteTypes\ComplexSprite.cs" />
     <Compile Include="SpriteTypes\GameSprite.cs" />
