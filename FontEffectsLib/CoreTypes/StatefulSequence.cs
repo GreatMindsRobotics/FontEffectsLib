@@ -18,7 +18,7 @@ namespace FontEffectsLib.CoreTypes
         /// <typeparam name="T">An object type that supports the <see cref="IStateful"/> interface.</typeparam>
         /// <param name="item">The <see cref="IStateful"/> object that caused the event to be raised.</param>
         public delegate void MonitoredStateReached<T>(T item) where T : IStateful;
-        
+
         /// <summary>
         /// This event delegate is raised when all <see cref="IStateful"/> objects in this <see cref="T:StatefulSequence"/> reached their monitored states.
         /// </summary>
@@ -33,21 +33,22 @@ namespace FontEffectsLib.CoreTypes
         /// This event is fired when all <see cref="IStateful"/> objects in this <see cref="T:StatefulSequence"/> reached their monitored states.
         /// </summary>
         public event MonitoredStateReached SequenceReachedMonitoredState;
-        
+
         /// <summary>
         /// Stores <see cref="T:KeyValuePair"/>s of monitored states and their types. Using a <see cref="T:Dictionary"/> object ensures only one state being monitored per type.
         /// </summary>
         protected Dictionary<Type, object> _monitoredStates = new Dictionary<Type, object>();
-        
+
         /// <summary>
         /// Stores boolean values in corresponding positions to the <see cref="T:List"/> of <see cref="IStateful"/> objects.
         /// </summary>
         protected List<bool> _sequenceCompleted = new List<bool>();
 
         /// <summary>
-        /// Gets a dictionary which stores monitored states and their types. Using a <see cref="T:Dictionary"/> object ensures only one state being monitored per type.
+        /// Gets a dictionary which stores monitored states and their types.
+        /// Using an <see cref="T:IDictionary"/> implementation ensures only one state being monitored per type.
         /// </summary>
-        public Dictionary<Type, object> MonitoredStates
+        public IDictionary<Type, object> MonitoredStates
         {
             get { return _monitoredStates; }
         }
@@ -131,13 +132,13 @@ namespace FontEffectsLib.CoreTypes
             //Find index and remove from sequenceCompleted List
             int index = IndexOf((TTracked)item);
             _sequenceCompleted.RemoveAt(index);
-            
+
             base.Remove(item);
         }
 
         public new void RemoveAt(int index)
         {
-            this.Remove(this[index]);            
+            this.Remove(this[index]);
         }
 
         public void RemoveRange(IEnumerable<TTracked> items)
@@ -155,31 +156,88 @@ namespace FontEffectsLib.CoreTypes
                 this.Remove(item);
             }
         }
-        
+
         #endregion List Overrides
+
+        private sealed class StringEqualityComparer : IEqualityComparer<Object>
+        {
+            static StringEqualityComparer()
+            {
+                _inst = new StringEqualityComparer();
+            }
+
+            private StringEqualityComparer() { }
+
+            private static StringEqualityComparer _inst;
+
+            public static StringEqualityComparer Instance
+            {
+                get
+                {
+                    return _inst;
+                }
+            }
+
+            public bool Equals(object x, object y)
+            {
+                if (x == null)
+                {
+                    return y == null;
+                }
+
+                if (y == null)
+                {
+                    return x == null;
+                }
+
+                return x.ToString() == y.ToString();
+            }
+
+            public int GetHashCode(object obj)
+            {
+                return obj == null ? 0 : obj.GetHashCode();
+            }
+        }
+
+        private IEqualityComparer<object> _stateEqualityComparer = StringEqualityComparer.Instance;
+
+        /// <summary>
+        /// Gets or sets an equality comparer that is used for comparing object states.
+        /// When this comparer determines that an object's state has changed to its monitored state, the appropriate events will be fired and actions will be taken.
+        /// If this value is set to null, the default state equality comparer will be used.
+        /// The default state equality comparer compares state objects by comparing their string implementations and delegating the hash code computation to the objects themselves.
+        /// The hash code functionality of this object is not used internally.
+        /// </summary>
+        public IEqualityComparer<object> StateEqualityComparer
+        {
+            get { return _stateEqualityComparer; }
+            set { _stateEqualityComparer = value == null ? StringEqualityComparer.Instance : value; }
+        }
+
 
         protected void item_StateChanged(object sender, StateEventArgs e)
         {
-            foreach (KeyValuePair<Type, object> monitoredState in _monitoredStates)
+            object monitorData;
+
+            if (!_monitoredStates.TryGetValue(e.DataType, out monitorData) || !StateEqualityComparer.Equals(e.Data, monitorData))
             {
-                if (e.DataType == monitoredState.Key && e.Data.ToString() == monitoredState.Value.ToString())
-                {
-                    //Mark this item in SequenceCompleted List
-                    int index = IndexOf((TTracked)sender);
-                    _sequenceCompleted[index] = true;
+                return;
+            }
 
-                    //Raise event notifying subscribers this item has completed the sequence
-                    if (ItemReachedMonitoredState != null)
-                    {
-                        ItemReachedMonitoredState((TTracked)sender);
-                    }
+            //Mark this item in SequenceCompleted List
+            int index = IndexOf((TTracked)sender);
+            _sequenceCompleted[index] = true;
 
-                    //If all items completed the sequence, raise SequenceReachedMonitoredState event
-                    if (SequenceReachedMonitoredState != null && _sequenceCompleted.All<bool>(b => b))
-                    {
-                        SequenceReachedMonitoredState();
-                    }
-                }
+            //Raise event notifying subscribers this item has completed the sequence
+            if (ItemReachedMonitoredState != null)
+            {
+                ItemReachedMonitoredState((TTracked)sender);
+            }
+
+            //If all items completed the sequence, raise SequenceReachedMonitoredState event
+            if (SequenceReachedMonitoredState != null && _sequenceCompleted.All<bool>(b => b))
+            {
+                SequenceReachedMonitoredState();
             }
         }
     }

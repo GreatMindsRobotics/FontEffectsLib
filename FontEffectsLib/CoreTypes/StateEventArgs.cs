@@ -10,12 +10,18 @@ namespace FontEffectsLib.CoreTypes
         protected Type _dataType;
         protected object _data;
 
+        /// <summary>
+        /// Gets or sets the type of the conveyed state information.
+        /// </summary>
         public Type DataType
         {
             get { return _dataType; }
             set { _dataType = value; }
         }
 
+        /// <summary>
+        /// Gets or sets the new state data represented by this event.
+        /// </summary>
         public object Data
         {
             get { return _data; }
