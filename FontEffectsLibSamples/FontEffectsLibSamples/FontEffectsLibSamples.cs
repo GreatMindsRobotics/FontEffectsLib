@@ -167,9 +167,9 @@ namespace FontEffectsLibSamples
             donateHundred = new AchievementPanel(0, Content.Load<SpriteFont>("SlidingFont"), Content.Load<SpriteFont>("ArcadeFont"), "Donate $100 to GMR", GraphicsDevice);
             donateHundred.Condition = AchievementPanel.AreHundredDollarsDonated;
 
-            noCoinSpam = new AchievementPanel(0, Content.Load<SpriteFont>("SlidingFont"), Content.Load<SpriteFont>("ArcadeFont"), "Don't insert coins for one minute", GraphicsDevice);
+            noCoinSpam = new AchievementPanel(0, Content.Load<SpriteFont>("SlidingFont"), Content.Load<SpriteFont>("ArcadeFont"), "Don't insert coins for 30 seconds", GraphicsDevice);
             noCoinSpam.Position = new Vector2(GraphicsDevice.Viewport.Width - noCoinSpam.Width, noCoinSpam.Position.Y);
-            noCoinSpam.Condition = AchievementPanel.IsNoCoinsInsertedAtOneMinute;
+            noCoinSpam.Condition = AchievementPanel.IsNoCoinsInsertedAtThirtySeconds;
 
             allAchievementsDone = new AchievementPanel(0, Content.Load<SpriteFont>("SlidingFont"), Content.Load<SpriteFont>("ArcadeFont"), "Finish all achievements", GraphicsDevice);
             allAchievementsDone.Condition = delegate(GameTime gt) { return standardAchievementsCompleted; };
@@ -188,11 +188,9 @@ namespace FontEffectsLibSamples
             typingText.Start();
         }
 
-        Action marksAchievementsCompleted = delegate() { standardAchievementsCompleted = true; };
-
         void allAchievementPanels_SequenceReachedMonitoredState()
         {
-            taskScheduler.ScheduleFutureTask(TimeSpan.FromSeconds(3), marksAchievementsCompleted);
+            taskScheduler.ScheduleFutureTask(TimeSpan.FromSeconds(3), () => standardAchievementsCompleted = true);
         }
 
         void typingText_StateChanged(object sender, StateEventArgs e)
@@ -295,6 +293,7 @@ namespace FontEffectsLibSamples
             insertFive.Update(gameTime);
             donateHundred.Update(gameTime);
             noCoinSpam.Update(gameTime);
+            allAchievementsDone.Update(gameTime);
             base.Update(gameTime);
 
             lastKeyboardState = currentKeyboardState;
@@ -334,6 +333,7 @@ namespace FontEffectsLibSamples
             donateHundred.Draw(spriteBatch);
             noCoinSpam.Draw(spriteBatch);
             typingText.Draw(spriteBatch);
+            allAchievementsDone.Draw(spriteBatch);
             spriteBatch.End();
 
             base.Draw(gameTime);

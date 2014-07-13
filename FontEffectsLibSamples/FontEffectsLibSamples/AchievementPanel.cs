@@ -26,9 +26,9 @@ namespace FontEffectsLibSamples
 
         public event EventHandler AchievementEarned;
 
-        public static bool IsNoCoinsInsertedAtOneMinute(GameTime currentGameTime)
+        public static bool IsNoCoinsInsertedAtThirtySeconds(GameTime currentGameTime)
         {
-            return FontEffectsLibSamples.CoinsInserted == 0 && currentGameTime.TotalGameTime >= TimeSpan.FromMinutes(1);
+            return FontEffectsLibSamples.CoinsInserted == 0 && currentGameTime.TotalGameTime >= TimeSpan.FromMinutes(0.5);
         }
 
         public static bool AreHundredDollarsDonated(GameTime currentGameTime)

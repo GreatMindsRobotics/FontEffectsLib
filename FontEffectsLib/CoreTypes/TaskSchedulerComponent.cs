@@ -27,17 +27,7 @@ namespace FontEffectsLib.CoreTypes
             
             public bool IsRepeating;
 
-            public abstract void RunDelegate()
-            {
-                //if (HasUserState)
-                //{
-                //    Delegate.DynamicInvoke(UserState);
-                //}
-                //else
-                //{
-                //    Delegate.DynamicInvoke();
-                //}
-            }
+            public abstract void RunDelegate();
         }
 
         private sealed class ScheduledStatelessDelegateTask : ScheduledTaskInfo
@@ -116,9 +106,9 @@ namespace FontEffectsLib.CoreTypes
             List<DateTime> removedTimes = new List<DateTime>();
             foreach (var scheduledList in _scheduledTasks)
             {
-                if (scheduledList.Key < DateTime.Now)
+                if (DateTime.Now < scheduledList.Key)
                 {
-                    return;
+                    continue;
                 }
 
                 // If the time at which it was scheduled is either now or after now (late, but not intended), execute it
