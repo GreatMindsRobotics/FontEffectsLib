@@ -68,6 +68,7 @@
     <Compile Include="CoreTypes\SpriteManagerComponent.cs" />
     <Compile Include="CoreTypes\StateEventArgs.cs" />
     <Compile Include="CoreTypes\StatefulSequence.cs" />
+    <Compile Include="CoreTypes\TaskSchedulerComponent.cs" />
     <Compile Include="FontTypes\AccelDropInFont.cs" />
     <Compile Include="FontTypes\ArcadeFont.cs" />
     <Compile Include="FontTypes\DropInFont.cs" />
