@@ -18,7 +18,7 @@ namespace FontEffectsLib.FontTypes
         private RectangleF _hitBox;
 
         /// <summary>
-        /// Bounding box for this GameFont. Supports floating points.
+        /// Gets the bounding box for this GameFont. Supports floating point values.
         /// </summary>
         public RectangleF HitBox
         {
@@ -64,7 +64,7 @@ namespace FontEffectsLib.FontTypes
 
             _font = font;
             _text = new StringBuilder(text);
-            _hitBox = new RectangleF(position.X-_origin.X, position.Y-_origin.Y, Size.X, Size.Y);
+            _hitBox = new RectangleF(position.X - _origin.X, position.Y - _origin.Y, Size.X, Size.Y);
         }
 
         public override void SetCenterAsOrigin()
@@ -87,12 +87,9 @@ namespace FontEffectsLib.FontTypes
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            if(_isVisible)
+            if (_isVisible && _text != null)
             {
-                if (_text != null)
-                {
-                    spriteBatch.DrawString(_font, _text, _position, _tintColor, _rotation, _origin, _scale, _effects, _layerDepth);
-                }
+                spriteBatch.DrawString(_font, _text, _position, _tintColor, _rotation, _origin, _scale, _effects, _layerDepth);
             }
         }
     }

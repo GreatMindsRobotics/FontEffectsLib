@@ -19,7 +19,16 @@ namespace FontEffectsLib.FontTypes
 
         public event EventHandler<StateEventArgs> StateChanged;
 
-        private string _textToType = String.Empty;
+        /// <summary>
+        /// Since we're doing primarily array access, an array is better used internally.
+        /// </summary>
+        private char[] _textToType = new char[0];
+
+        /// <summary>
+        /// This value can be cached as the text to type is immutable after creation.
+        /// </summary>
+        private Vector2 _cachedTextTypeSize;
+
         private int _currentLetterIndex;
 
         private TimeSpan _delayTime;
@@ -39,7 +48,7 @@ namespace FontEffectsLib.FontTypes
         {
             get
             {
-                return _font.MeasureString(_textToType) * _scale;
+                return _cachedTextTypeSize * _scale;
             }
         }
 
@@ -56,8 +65,16 @@ namespace FontEffectsLib.FontTypes
 
         public void Finished()
         {
-            _text.Clear();
-            _text.Append(_textToType);
+            Finished(true);
+        }
+
+        protected void Finished(bool typeText)
+        {
+            if (typeText)
+            {
+                _text.Clear();
+                _text.Append(_textToType);
+            }
             _currentState = TypingState.Finished;
             if (StateChanged != null)
             {
@@ -70,13 +87,14 @@ namespace FontEffectsLib.FontTypes
             _currentState = TypingState.Typing;
         }
 
-        public TypingFont(SpriteFont font, Vector2 position, Color color, string textToType, int delayTime):
+        public TypingFont(SpriteFont font, Vector2 position, Color color, string textToType, TimeSpan delayTime) :
             base(font, position, color)
         {
             _elapsedDelayTime = TimeSpan.Zero;
-            _delayTime = TimeSpan.FromMilliseconds(delayTime);
+            _delayTime = delayTime;
             _currentLetterIndex = -1;
-            _textToType = textToType;
+            _textToType = textToType.ToCharArray();
+            _cachedTextTypeSize = _font.MeasureString(textToType);
             _currentState = TypingState.NotStarted;
         }
 
@@ -96,8 +114,8 @@ namespace FontEffectsLib.FontTypes
 
                         if (_currentLetterIndex >= _textToType.Length)
                         {
-                            Finished();
-                            break;
+                            Finished(false);
+                            return;
                         }
 
                         _text.Append(_textToType[_currentLetterIndex]);
