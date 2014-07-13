@@ -44,6 +44,9 @@ namespace FontEffectsLibSamples
         AchievementPanel insertFive;
         AchievementPanel donateHundred;
         AchievementPanel noCoinSpam;
+        AchievementPanel allAchievementsDone;
+
+        static bool standardAchievementsCompleted = false;
 
         MouseState currentMS;
 
@@ -163,11 +166,26 @@ namespace FontEffectsLibSamples
             noCoinSpam.Position = new Vector2(GraphicsDevice.Viewport.Width - noCoinSpam.Width, noCoinSpam.Position.Y);
             noCoinSpam.Condition = AchievementPanel.IsNoCoinsInsertedAtOneMinute;
 
+            allAchievementsDone = new AchievementPanel(0, Content.Load<SpriteFont>("SlidingFont"), Content.Load<SpriteFont>("ArcadeFont"), "Finish all achievements", GraphicsDevice);
+            allAchievementsDone.Condition = delegate(GameTime gt) { return standardAchievementsCompleted; };
+
+            StatefulSequence<AchievementPanel> allAchievementPanels = new StatefulSequence<AchievementPanel>(AchievementPanel.PanelState.Done, typeof(AchievementPanel.PanelState));
+            allAchievementPanels.Add(noCoinSpam);
+            allAchievementPanels.Add(donateHundred);
+            allAchievementPanels.Add(insertFive);
+
+            allAchievementPanels.SequenceReachedMonitoredState += new StatefulSequence<AchievementPanel>.MonitoredStateReached(allAchievementPanels_SequenceReachedMonitoredState);
+
             slidingText.SequenceReachedMonitoredState += new StatefulSequence<SlidingFont>.MonitoredStateReached(slidingText_SequenceReachedMonitoredState);
 
-            typingText = new TypingFont(Content.Load<SpriteFont>("ArcadeFont"), Vector2.Zero, Color.Black, "Typing text here", 200);
+            typingText = new TypingFont(Content.Load<SpriteFont>("ArcadeFont"), new Vector2(200, 0), Color.Black, "Typing text here", TimeSpan.FromMilliseconds(200));
             typingText.StateChanged += new EventHandler<StateEventArgs>(typingText_StateChanged);
             typingText.Start();
+        }
+
+        void allAchievementPanels_SequenceReachedMonitoredState()
+        {
+            standardAchievementsCompleted = true;
         }
 
         void typingText_StateChanged(object sender, StateEventArgs e)
