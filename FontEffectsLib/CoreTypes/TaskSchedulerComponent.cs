@@ -22,23 +22,42 @@ namespace FontEffectsLib.CoreTypes
         {
         }
 
-        private struct ScheduledTaskInfo
+        private abstract class ScheduledTaskInfo
         {
-            public Delegate Delegate;
-            public Object UserState;
-            public Boolean HasUserState;
+            
             public bool IsRepeating;
 
-            public void RunDelegate()
+            public abstract void RunDelegate()
             {
-                if (HasUserState)
-                {
-                    Delegate.DynamicInvoke(UserState);
-                }
-                else
-                {
-                    Delegate.DynamicInvoke();
-                }
+                //if (HasUserState)
+                //{
+                //    Delegate.DynamicInvoke(UserState);
+                //}
+                //else
+                //{
+                //    Delegate.DynamicInvoke();
+                //}
+            }
+        }
+
+        private sealed class ScheduledStatelessDelegateTask : ScheduledTaskInfo
+        {
+            public Action Delegate;
+
+            public override void RunDelegate()
+            {
+                Delegate.Invoke();
+            }
+        }
+
+        private sealed class ScheduledStateIncludedDelegateTask<T> : ScheduledTaskInfo
+        {
+            public Action<T> Delegate;
+            public T UserState;
+
+            public override void RunDelegate()
+            {
+                Delegate.Invoke(UserState);
             }
         }
 
@@ -71,20 +90,21 @@ namespace FontEffectsLib.CoreTypes
         /// </summary>
         /// <param name="time">The time from now at which to execute the task.</param>
         /// <param name="task">The task to execute.</param>
-        public void ScheduleFutureTask(TimeSpan time, Delegate task)
+        public void ScheduleFutureTask(TimeSpan time, Action task)
         {
-            ScheduleTask(DateTime.Now + time, new ScheduledTaskInfo() { Delegate = task, HasUserState = false, IsRepeating = false });
+            ScheduleTask(DateTime.Now + time, new ScheduledStatelessDelegateTask() { Delegate = task, IsRepeating = false });
         }
 
         /// <summary>
-        /// Schedule a task to execute at a future time once.
+        /// Schedule a task to execute at a future time once. The task may be passed a user state parameter.
         /// </summary>
+        /// <typeparam name="T">The type of the user state parameter.</typeparam>
         /// <param name="time">The time from now at which to execute the task.</param>
         /// <param name="task">The task to execute.</param>
         /// <param name="userState">The user state to pass to the delegate task.</param>
-        public void ScheduleFutureTask(TimeSpan time, Delegate task, object userState)
+        public void ScheduleFutureTask<T>(TimeSpan time, Action<T> task, T userState)
         {
-            ScheduleTask(DateTime.Now + time, new ScheduledTaskInfo() { Delegate = task, HasUserState = true, UserState = userState, IsRepeating = false });
+            ScheduleTask(DateTime.Now + time, new ScheduledStateIncludedDelegateTask<T>() { Delegate = task, UserState = userState, IsRepeating = false });
         }
 
         /// <summary>

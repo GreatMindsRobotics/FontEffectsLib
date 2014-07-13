@@ -52,6 +52,8 @@ namespace FontEffectsLibSamples
 
         TypingFont typingText;
 
+        TaskSchedulerComponent taskScheduler;
+
         public FontEffectsLibSamples()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -71,6 +73,9 @@ namespace FontEffectsLibSamples
             viewport = GraphicsDevice.Viewport;
             screenSize = new Vector2(viewport.Width, viewport.Height);
             CoinsInserted = 0;
+
+            taskScheduler = new TaskSchedulerComponent(this);
+            Components.Add(taskScheduler);
 
             base.Initialize();
         }
@@ -183,9 +188,11 @@ namespace FontEffectsLibSamples
             typingText.Start();
         }
 
+        Action marksAchievementsCompleted = delegate() { standardAchievementsCompleted = true; };
+
         void allAchievementPanels_SequenceReachedMonitoredState()
         {
-            standardAchievementsCompleted = true;
+            taskScheduler.ScheduleFutureTask(TimeSpan.FromSeconds(3), marksAchievementsCompleted);
         }
 
         void typingText_StateChanged(object sender, StateEventArgs e)
