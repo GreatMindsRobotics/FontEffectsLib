@@ -65,6 +65,24 @@ namespace FontEffectsLib.CoreTypes
             _monitoredStates.Add(stateType, monitorState);
         }
 
+        /// <summary>
+        /// Creates a new <see cref="T:StatefulSequence"/> <see cref="T:List"/>, specifying multiple monitored states.
+        /// </summary>
+        /// <param name="stateTypes">State values to monitor for. Best choice is <see cref="T:enum"/> values.</param>
+        public StatefulSequence(params KeyValuePair<Type, object>[] stateTypes)
+            : base()
+        {
+            if (stateTypes == null || stateTypes.Length < 1)
+            {
+                throw new ArgumentException("At least one state monitor target must be specified.");
+            }
+
+            foreach (var monitor in stateTypes)
+            {
+                _monitoredStates.Add(monitor.Key, monitor.Value);
+            }
+        }
+
         #region List Overrides
 
         /// <summary>
