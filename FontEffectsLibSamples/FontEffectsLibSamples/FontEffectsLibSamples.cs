@@ -50,9 +50,12 @@ namespace FontEffectsLibSamples
 
         MouseState currentMS;
 
-        TypingFont typingText;
+        TypingFont colorfulTypingText;
+        TypingFont regularTypingText;
 
         TaskSchedulerComponent taskScheduler;
+
+        Random random;
 
         public FontEffectsLibSamples()
         {
@@ -150,7 +153,7 @@ namespace FontEffectsLibSamples
             }
 
             targetPos = new Vector2(505, 420);
-            Random random = new Random();
+            random = new Random();
 
             foreach (char letter in "Effects!")
             {
@@ -183,10 +186,17 @@ namespace FontEffectsLibSamples
 
             slidingText.SequenceReachedMonitoredState += new StatefulSequence<SlidingFont>.MonitoredStateReached(slidingText_SequenceReachedMonitoredState);
 
-            typingText = new TypingFont(Content.Load<SpriteFont>("ArcadeFont"), new Vector2(200, 0), Color.Black, "Typing text here", TimeSpan.FromMilliseconds(200));
-            typingText.StateChanged += new EventHandler<StateEventArgs>(typingText_StateChanged);
-            typingText.Start();
+            colorfulTypingText = new TypingFont(Content.Load<SpriteFont>("ArcadeFont"), new Vector2(200, 0), Color.Black, "Typing text here", TimeSpan.FromMilliseconds(200));
+            colorfulTypingText.StateChanged += new EventHandler<StateEventArgs>(typingText_StateChanged);
+            colorfulTypingText.CharacterTyped += new EventHandler<TypingFont.CharacterTypedEventArgs>(typingText_CharacterTyped);
+            colorfulTypingText.Tag = "1";
+            colorfulTypingText.Start();
+
+            regularTypingText = new TypingFont(Content.Load<SpriteFont>("ArcadeFont"), new Vector2(400, 0), Color.Black, "... and more typing text here...", TimeSpan.FromMilliseconds(50));
+            regularTypingText.StateChanged += new EventHandler<StateEventArgs>(typingText_StateChanged);
+            regularTypingText.Tag = "2";
         }
+
 
         void allAchievementPanels_SequenceReachedMonitoredState()
         {
@@ -195,9 +205,34 @@ namespace FontEffectsLibSamples
 
         void typingText_StateChanged(object sender, StateEventArgs e)
         {
-            
+            if ((TypingFont.FontState)e.Data == TypingFont.FontState.Finished)
+            {
+                TypingFont typingFont = (TypingFont)sender;
+                if (typingFont.Tag.ToString() == "1")
+                {
+                    regularTypingText.Reset();
+                    regularTypingText.DelayTime = TimeSpan.FromMilliseconds(random.Next(50, 200));
+                    regularTypingText.Start();
+                }
+                else
+                {
+                    colorfulTypingText.Reset();
+                    colorfulTypingText.DelayTime = TimeSpan.FromMilliseconds(random.Next(50, 200));
+                    colorfulTypingText.Start();
+                }
+            }
         }
-        
+
+        Color[] typingTextColors = new Color[] { Color.Black, Color.Red, Color.Green, Color.Blue, Color.White, Color.HotPink };
+        int colorIndex = 0;
+
+        void typingText_CharacterTyped(object sender, TypingFont.CharacterTypedEventArgs e)
+        {
+            colorfulTypingText.TintColor = typingTextColors[colorIndex];
+            colorIndex++;
+            colorIndex %= typingTextColors.Length;
+        }
+
 
         void slidingText_SequenceReachedMonitoredState()
         {
@@ -264,7 +299,8 @@ namespace FontEffectsLibSamples
             titleText1.Update(gameTime);
             titleText2.Update(gameTime);
             titleText3.Update(gameTime);
-            typingText.Update(gameTime);
+            colorfulTypingText.Update(gameTime);
+            regularTypingText.Update(gameTime);
 
             by.Update(gameTime);
 
@@ -332,7 +368,8 @@ namespace FontEffectsLibSamples
             insertFive.Draw(spriteBatch);
             donateHundred.Draw(spriteBatch);
             noCoinSpam.Draw(spriteBatch);
-            typingText.Draw(spriteBatch);
+            colorfulTypingText.Draw(spriteBatch);
+            regularTypingText.Draw(spriteBatch);
             allAchievementsDone.Draw(spriteBatch);
             spriteBatch.End();
 

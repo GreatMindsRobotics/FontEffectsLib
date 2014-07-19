@@ -93,7 +93,7 @@ namespace FontEffectsLibSamples
             Width = achievePanelWidth;
             Height = achievePanelHeight;
 
-            ChangeState(PanelState.Waiting);
+            changeState(PanelState.Waiting);
         }
 
         public readonly int Height;
@@ -121,7 +121,7 @@ namespace FontEffectsLibSamples
             {
                 IsVisible = true;
                 Velocity = new Vector2(0, 0.75f);
-                ChangeState(PanelState.Sliding);
+                changeState(PanelState.Sliding);
             }
 
             if (_panelState == PanelState.Sliding && Position.Y > 0)
@@ -131,7 +131,7 @@ namespace FontEffectsLibSamples
                 {
                     AchievementEarned(this, EventArgs.Empty);
                 }
-                ChangeState(PanelState.Fading);
+                changeState(PanelState.Fading);
             }
 
             if (_panelState == PanelState.Fading)
@@ -143,7 +143,7 @@ namespace FontEffectsLibSamples
                 {
                     IsVisible = false;
                     TintColor = Color.White;
-                    ChangeState(PanelState.Done);
+                    changeState(PanelState.Done);
                 }
             }
 
@@ -160,15 +160,17 @@ namespace FontEffectsLibSamples
             Done
         }
 
-        private void ChangeState(PanelState newState)
+        private void changeState(PanelState newState)
         {
             if (newState == _panelState)
             {
                 return;
             }
-            if (StateChanged != null)
+
+            EventHandler<StateEventArgs> handler = StateChanged;
+            if (handler != null)
             {
-                StateChanged(this, new StateEventArgs(typeof(AchievementPanel.PanelState), newState));
+                handler(this, new StateEventArgs(typeof(AchievementPanel.PanelState), newState));
             }
             _panelState = newState;
         }

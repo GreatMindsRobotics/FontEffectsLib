@@ -212,10 +212,11 @@ namespace FontEffectsLib.SpriteTypes
         protected virtual void switchState(PanelState panelState)
         {
             _state = panelState;
-            
-            if (StateChanged != null)
+
+            EventHandler<StateEventArgs> handler = StateChanged;
+            if (handler != null)
             {
-                StateChanged(this, new StateEventArgs(typeof(PanelState), panelState));
+                handler(this, new StateEventArgs(typeof(PanelState), panelState));
             }
         }
 

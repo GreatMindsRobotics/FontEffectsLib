@@ -13,9 +13,10 @@ namespace FontEffectsLib.CoreTypes
 
         protected void FireVisibilityStateChangedEvent()
         {
-            if (VisibilityStateChanged != null)
+            EventHandler handler = VisibilityStateChanged;
+            if (handler != null)
             {
-                VisibilityStateChanged(this, EventArgs.Empty);
+                handler(this, EventArgs.Empty);
             }
         }
 

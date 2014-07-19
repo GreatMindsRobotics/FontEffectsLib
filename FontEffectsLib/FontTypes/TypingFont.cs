@@ -10,14 +10,87 @@ namespace FontEffectsLib.FontTypes
 {
     public class TypingFont : GameFont, IStateful
     {
+        #region Obsolete types support
+
+        /// <summary>
+        /// This type provides backwards compatibility and legacy support for:
+        ///    public enum TypingFont.TypingState (now deprecated)
+        /// </summary>
+        [Obsolete("Please use TypingFont.FontState instead", false)]
         public enum TypingState
         {
+            /// <summary>           
+            /// Typing has not started yet
+            /// </summary>
+            [Obsolete("Please use TypingFont.FontState.NotStarted instead", false)]
+            NotTyping,
+
+            /// <summary>
+            /// Typing letters
+            /// </summary>
+            [Obsolete("Please use TypingFont.FontState.Typing instead", false)]
+            Typing = 1,
+
+            /// <summary>
+            /// Finished typing all letters.
+            /// </summary>
+            [Obsolete("Please use TypingFont.FontState.Finished instead", false)]
+            Finished = 2
+        }
+
+        #endregion Obsolete types support
+
+        /// <summary>
+        /// Indicates the state of this TypingFont
+        /// </summary>
+        public enum FontState
+        {
+            /// <summary>
+            /// Typing has not started yet
+            /// </summary>
             NotStarted,
+            
+            /// <summary>
+            /// Typing letters
+            /// </summary>
             Typing,
+
+            /// <summary>
+            /// Finished typing all letters.
+            /// </summary>
             Finished
         }
 
+
+        public class CharacterTypedEventArgs : EventArgs
+        {
+            /// <summary>
+            /// Gets the character that was just typed by the TypingFont
+            /// </summary>
+            public char TypedCharacter { get; set; }
+
+            /// <summary>
+            /// Creates instance of CharacterTypedEventArgs class
+            /// </summary>
+            /// <param name="typedCharacter">The character about to be typed (same update)</param>
+            public CharacterTypedEventArgs(char typedCharacter)
+            {
+                TypedCharacter = typedCharacter;
+            }
+        }
+
+        /// <summary>
+        /// Fires when the font state changes.
+        /// StateEventArgs.DataType is TypingFont.FontState
+        /// StateEventArgs.Data is the new font state.
+        /// </summary>
         public event EventHandler<StateEventArgs> StateChanged;
+
+        /// <summary>
+        /// Fires whenever a single character is typed. 
+        /// CharacterTypedEventArgs.TypedCharacter contains the character about to be typed (same update)
+        /// </summary>
+        public event EventHandler<CharacterTypedEventArgs> CharacterTyped;
 
         /// <summary>
         /// Since we're doing primarily array access, an array is better used internally.
@@ -31,16 +104,18 @@ namespace FontEffectsLib.FontTypes
 
         private int _currentLetterIndex;
 
-        private TimeSpan _delayTime;
+        public TimeSpan DelayTime { get; set; }
+
         private TimeSpan _elapsedDelayTime;
 
-        private TypingState _currentState;
+        private FontState _state;
 
-        public TypingState State
+
+        public FontState State
         {
             get
             {
-                return _currentState;
+                return _state;
             }
         }
 
@@ -54,13 +129,11 @@ namespace FontEffectsLib.FontTypes
 
         public void Reset()
         {
-            _currentState = TypingState.NotStarted;
+            _state = FontState.NotStarted;
             _text.Clear();
-            _currentLetterIndex = 0;
-            if (StateChanged != null)
-            {
-                StateChanged(this, new StateEventArgs(typeof(TypingState), TypingState.NotStarted));
-            }
+            _currentLetterIndex = -1;
+
+            changeState(FontState.NotStarted);
         }
 
         public void Finished()
@@ -75,53 +148,52 @@ namespace FontEffectsLib.FontTypes
                 _text.Clear();
                 _text.Append(_textToType);
             }
-            _currentState = TypingState.Finished;
-            if (StateChanged != null)
-            {
-                StateChanged(this, new StateEventArgs(typeof(TypingState), TypingState.Finished));
-            }
+
+            changeState(FontState.Finished);
         }
 
         public void Start()
         {
-            _currentState = TypingState.Typing;
+            changeState(FontState.Typing);
         }
 
         public TypingFont(SpriteFont font, Vector2 position, Color color, string textToType, TimeSpan delayTime) :
             base(font, position, color)
         {
             _elapsedDelayTime = TimeSpan.Zero;
-            _delayTime = delayTime;
+            DelayTime = delayTime;
             _currentLetterIndex = -1;
             _textToType = textToType.ToCharArray();
             _cachedTextTypeSize = _font.MeasureString(textToType);
-            _currentState = TypingState.NotStarted;
+            _state = FontState.NotStarted;
         }
 
         public override void Update(GameTime gameTime)
         {
 
-            switch (_currentState)
+            switch (_state)
             {
-                case TypingState.Typing:
+                case FontState.Typing:
                     _elapsedDelayTime += gameTime.ElapsedGameTime;
 
-                    if (_elapsedDelayTime >= _delayTime)
+                    if (_elapsedDelayTime >= DelayTime)
                     {
-                        _elapsedDelayTime = TimeSpan.Zero;
+                        _elapsedDelayTime = TimeSpan.Zero;                                               
                         _currentLetterIndex++;
-
-
+     
                         if (_currentLetterIndex >= _textToType.Length)
                         {
                             Finished(false);
                             return;
                         }
 
-                        _text.Append(_textToType[_currentLetterIndex]);
+                        EventHandler<CharacterTypedEventArgs> handler = CharacterTyped;                
+                        if (handler != null)
+                        { 
+                            handler(this, new CharacterTypedEventArgs(_textToType[_currentLetterIndex]));
+                        }
 
-                        
-                        
+                        _text.Append(_textToType[_currentLetterIndex]);                                                
                     }
 
                     break;
@@ -132,6 +204,17 @@ namespace FontEffectsLib.FontTypes
             }
 
             base.Update(gameTime);
+        }
+
+        protected virtual void changeState(FontState newState)
+        {
+            _state = newState;
+
+            EventHandler<StateEventArgs> handler = StateChanged;
+            if (handler != null)
+            {
+                handler(this, new StateEventArgs(newState.GetType(), newState));
+            }
         }
     }
 }

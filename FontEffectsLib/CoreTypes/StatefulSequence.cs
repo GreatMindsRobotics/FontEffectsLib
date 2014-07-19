@@ -247,15 +247,17 @@ namespace FontEffectsLib.CoreTypes
             _sequenceCompleted[index] = true;
 
             //Raise event notifying subscribers this item has completed the sequence
-            if (ItemReachedMonitoredState != null)
+            MonitoredStateReached<TTracked> monitoredStateReached = ItemReachedMonitoredState;
+            if (monitoredStateReached != null)
             {
-                ItemReachedMonitoredState((TTracked)sender);
+                monitoredStateReached((TTracked)sender);
             }
 
             //If all items completed the sequence, raise SequenceReachedMonitoredState event
-            if (SequenceReachedMonitoredState != null && _sequenceCompleted.All<bool>(b => b))
+            MonitoredStateReached sequenceReachedMonitoredState = SequenceReachedMonitoredState;
+            if (sequenceReachedMonitoredState != null && _sequenceCompleted.All<bool>(b => b))
             {
-                SequenceReachedMonitoredState();
+                sequenceReachedMonitoredState();
             }
         }
     }
