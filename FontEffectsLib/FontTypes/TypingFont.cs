@@ -12,6 +12,10 @@ namespace FontEffectsLib.FontTypes
     {
         #region Obsolete types support
 
+        /* Implementation Note:
+         * Since .NET enums are implemented with a backing numerical type, this type and FontState are interchangeable and can be safely casted to each other.
+         */
+
         /// <summary>
         /// This type provides backwards compatibility and legacy support for:
         ///    public enum TypingFont.TypingState (now deprecated)
@@ -23,7 +27,7 @@ namespace FontEffectsLib.FontTypes
             /// Typing has not started yet
             /// </summary>
             [Obsolete("Please use TypingFont.FontState.NotStarted instead", false)]
-            NotTyping,
+            NotTyping = 0,
 
             /// <summary>
             /// Typing letters
@@ -48,17 +52,17 @@ namespace FontEffectsLib.FontTypes
             /// <summary>
             /// Typing has not started yet
             /// </summary>
-            NotStarted,
+            NotStarted = 0,
             
             /// <summary>
             /// Typing letters
             /// </summary>
-            Typing,
+            Typing = 1,
 
             /// <summary>
             /// Finished typing all letters.
             /// </summary>
-            Finished
+            Finished = 2
         }
 
 
