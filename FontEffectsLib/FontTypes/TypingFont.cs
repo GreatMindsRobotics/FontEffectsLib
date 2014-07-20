@@ -46,7 +46,7 @@ namespace FontEffectsLib.FontTypes
         #endregion Obsolete types support
 
         /// <summary>
-        /// Indicates the state of this TypingFont
+        /// Indicates the state of a TypingFont instance.
         /// </summary>
         public enum FontState
         {
@@ -204,7 +204,12 @@ namespace FontEffectsLib.FontTypes
                         if (!arguments.Cancel)
                         {
                             _text.Append(arguments.TypedCharacter);
-                        }                    
+                        }
+                        else
+                        {
+                            // Undo increment of the index - will retry to type later
+                            _currentLetterIndex--;
+                        }
                     }
 
                     break;
@@ -224,7 +229,7 @@ namespace FontEffectsLib.FontTypes
             EventHandler<StateEventArgs> handler = StateChanged;
             if (handler != null)
             {
-                handler(this, new StateEventArgs(newState.GetType(), newState));
+                handler(this, new StateEventArgs(typeof(TypingFont.FontState), newState));
             }
         }
     }

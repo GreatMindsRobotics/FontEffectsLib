@@ -188,7 +188,7 @@ namespace FontEffectsLib.FontTypes
             EventHandler<StateEventArgs> handler = StateChanged;
             if (handler != null)
             {
-                handler(this, new StateEventArgs(newState.GetType(), newState));
+                handler(this, new StateEventArgs(typeof(DropInFont.FontState), newState));
             }
         }
     }
