@@ -5,6 +5,7 @@ using System.Text;
 using FontEffectsLib.CoreTypes;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
+using System.ComponentModel;
 
 namespace FontEffectsLib.FontTypes
 {
@@ -65,18 +66,20 @@ namespace FontEffectsLib.FontTypes
             Finished = 2
         }
 
-
-        public class CharacterTypedEventArgs : EventArgs
+        /// <summary>
+        /// Arguments for the event fired when a character is about to be typed.
+        /// </summary>
+        public class CharacterTypedEventArgs : CancelEventArgs
         {
             /// <summary>
-            /// Gets the character that was just typed by the TypingFont
+            /// Gets or sets the character that will be typed by the TypingFont.
             /// </summary>
             public char TypedCharacter { get; set; }
 
             /// <summary>
-            /// Creates instance of CharacterTypedEventArgs class
+            /// Creates instance of CharacterTypedEventArgs class.
             /// </summary>
-            /// <param name="typedCharacter">The character about to be typed (same update)</param>
+            /// <param name="typedCharacter">The character about to be typed.</param>
             public CharacterTypedEventArgs(char typedCharacter)
             {
                 TypedCharacter = typedCharacter;
@@ -91,8 +94,8 @@ namespace FontEffectsLib.FontTypes
         public event EventHandler<StateEventArgs> StateChanged;
 
         /// <summary>
-        /// Fires whenever a single character is typed. 
-        /// CharacterTypedEventArgs.TypedCharacter contains the character about to be typed (same update)
+        /// Fires whenever a single character is about to be typed. 
+        /// CharacterTypedEventArgs.TypedCharacter contains the character about to be typed within the same frame.
         /// </summary>
         public event EventHandler<CharacterTypedEventArgs> CharacterTyped;
 
@@ -192,12 +195,16 @@ namespace FontEffectsLib.FontTypes
                         }
 
                         EventHandler<CharacterTypedEventArgs> handler = CharacterTyped;                
+                        CharacterTypedEventArgs arguments = new CharacterTypedEventArgs(_textToType[_currentLetterIndex]);
                         if (handler != null)
-                        { 
-                            handler(this, new CharacterTypedEventArgs(_textToType[_currentLetterIndex]));
+                        {
+                            handler(this, arguments);
                         }
 
-                        _text.Append(_textToType[_currentLetterIndex]);                                                
+                        if (!arguments.Cancel)
+                        {
+                            _text.Append(arguments.TypedCharacter);
+                        }                    
                     }
 
                     break;
