@@ -5,6 +5,7 @@ using System.Text;
 using FontEffectsLib.CoreTypes;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System.ComponentModel;
 
 namespace FontEffectsLib.FontTypes
 {
@@ -64,6 +65,30 @@ namespace FontEffectsLib.FontTypes
             //Pass-through constructor
         }
 
+        /// <summary>
+        /// Arguments for the event fired when the arcade font color is about to cycle.
+        /// </summary>
+        public class ColorChangedEventArgs : CancelEventArgs
+        {
+            /// <summary>
+            /// Gets the color which the ArcadeFont will change to.
+            /// </summary>
+            public Color NewColor { get; private set; }
+
+            /// <summary>
+            /// Creates instance of ColorChangedEventArgs class.
+            /// </summary>
+            /// <param name="newColor">The color about to be changed to.</param>
+            public ColorChangedEventArgs(Color newColor)
+            {
+                NewColor = newColor;
+            }
+        }
+
+        /// <summary>
+        /// Fires whenever the color of the arcade font is about to be cycled through.
+        /// </summary>
+        public event EventHandler<ColorChangedEventArgs> ColorChanged;
 
         /// <summary>
         /// Create a new instance of <see cref="ArcadeFont"/>.
@@ -118,8 +143,21 @@ namespace FontEffectsLib.FontTypes
 
             if (_elapsedTime >= _delayTime)
             {
-                currentColor = currentColor + 1 == _fontColors.Count ? 0 : currentColor + 1;
-                _tintColor = _fontColors[currentColor];
+                int newColor = currentColor + 1 == _fontColors.Count ? 0 : currentColor + 1;
+                Color newColorVal = _fontColors[newColor];
+
+                EventHandler<ColorChangedEventArgs> handler = ColorChanged;
+                ColorChangedEventArgs arguments = new ColorChangedEventArgs(newColorVal);
+                if (handler != null)
+                {
+                    handler(this, arguments);
+                }
+
+                if (!arguments.Cancel)
+                {
+                    currentColor = newColor;
+                    _tintColor = newColorVal;
+                }
 
                 _elapsedTime = TimeSpan.Zero;
             }
