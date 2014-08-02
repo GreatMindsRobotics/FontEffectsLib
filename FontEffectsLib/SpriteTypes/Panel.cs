@@ -11,7 +11,7 @@ namespace FontEffectsLib.SpriteTypes
     /// <summary>
     /// Create an expandable / collapsable panel. 
     /// </summary>
-    public class Panel : GameSprite, IStateful
+    public class Panel : SlidingSprite, IStateful
     {
         /// <summary>
         /// StateChanged event is fired when any change in the panel's state occurs. <see cref="StateEventArgs"/> contain <see cref="PanelState"/> as Data.

@@ -81,6 +81,7 @@
     <Compile Include="SpriteTypes\ComplexSprite.cs" />
     <Compile Include="SpriteTypes\GameSprite.cs" />
     <Compile Include="SpriteTypes\Panel.cs" />
+    <Compile Include="SpriteTypes\SlidingSprite.cs" />
     <Compile Include="SpriteTypes\TexturePanel.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
