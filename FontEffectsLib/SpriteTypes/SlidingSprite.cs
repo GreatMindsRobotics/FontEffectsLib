@@ -21,7 +21,7 @@ namespace FontEffectsLib.SpriteTypes
         /// <summary>
         /// Raised when SlidingSprite completes sliding to the SlideTo position
         /// </summary>
-        public SlideCompletedState SlideCompleted;
+        public event SlideCompletedState SlideCompleted;
 
         /// <summary>
         /// Slide to position. Default is null (not sliding).
