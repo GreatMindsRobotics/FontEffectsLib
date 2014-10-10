@@ -5,12 +5,23 @@ using System.Text;
 using FontEffectsLib.SpriteTypes;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using FontEffectsLib.CoreTypes;
 
 namespace FontEffectsLib.SpriteTypes
 {
     public class SlidingSprite : GameSprite
     {
         protected Vector2? _slideTo;
+        
+        /// <summary>
+        /// Delegate type for SlideCompleted event 
+        /// </summary>
+        public delegate void SlideCompletedState();
+        
+        /// <summary>
+        /// Raised when SlidingSprite completes sliding to the SlideTo position
+        /// </summary>
+        public SlideCompletedState SlideCompleted;
 
         /// <summary>
         /// Slide to position. Default is null (not sliding).
@@ -64,6 +75,13 @@ namespace FontEffectsLib.SpriteTypes
             {
                 _slideTo = null;
                 _currentStep = null;
+
+                //Raise SlideCompleted event if there are any subscribers
+                SlideCompletedState handler = SlideCompleted;
+                if (handler != null)
+                {
+                    handler();
+                }
 
                 return;
             }
