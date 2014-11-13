@@ -72,7 +72,7 @@ namespace FontEffectsLibSamples
         protected override void Initialize()
         {
             IsMouseVisible = true;
-            
+
             viewport = GraphicsDevice.Viewport;
             screenSize = new Vector2(viewport.Width, viewport.Height);
             CoinsInserted = 0;
@@ -158,7 +158,7 @@ namespace FontEffectsLibSamples
             foreach (char letter in "Effects!")
             {
                 slidingText.Add(new SlidingFont(Content.Load<SpriteFont>("SlidingFont"), new Vector2(random.Next(0, GraphicsDevice.Viewport.Width), random.Next(0, GraphicsDevice.Viewport.Height)), targetPos, 1f + (float)random.NextDouble(), letter.ToString(), Color.Red) { EnableShadow = false, IsVisible = false });
-                targetPos.X += slidingText[slidingText.Count-1].Size.X; //Magic # - bad idea
+                targetPos.X += slidingText[slidingText.Count - 1].Size.X; //Magic # - bad idea
             }
 
             coolPanel = new TexturePanel(Content.Load<Texture2D>("WavyEffect"), new Vector2(120, 60), Vector2.One * .5f, new Vector2(550, 425), new Color(60, 60, 60, 128));
@@ -245,7 +245,7 @@ namespace FontEffectsLibSamples
         void titleText2_StateChanged(object sender, StateEventArgs e)
         {
             if (e.DataType == typeof(FadingFont.FontState))
-            {   
+            {
                 if ((FadingFont.FontState)e.Data == FadingFont.FontState.TargetValueReached)
                 {
                     coolPanel.Expand();
@@ -310,13 +310,13 @@ namespace FontEffectsLibSamples
             }
 
             insertCoins.Update(gameTime);
-            
+
             //If we can insert a coin and we in fact did
             if (insertCoins.IsVisible && ((currentKeyboardState.IsKeyDown(Keys.Space) && lastKeyboardState.IsKeyUp(Keys.Space)) || (currentKeyboardState.IsKeyDown(Keys.Enter) && lastKeyboardState.IsKeyUp(Keys.Enter))))
             {
                 coinsEffect.Play();
                 CoinsInserted++;
-                
+
 
                 //Alex's awesome reset
                 foreach (SlidingFont slidingFont in slidingText)
@@ -345,15 +345,15 @@ namespace FontEffectsLibSamples
 
             spriteBatch.Begin();
 
-            
+
 
             bgSprite.Draw(spriteBatch);
 
             titleText2.Draw(spriteBatch);
             titleText1.Draw(spriteBatch);
             titleText3.Draw(spriteBatch);
-            
-            
+
+
             by.Draw(spriteBatch);
 
             coolPanel.Draw(spriteBatch);

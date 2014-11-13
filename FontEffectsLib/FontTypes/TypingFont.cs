@@ -100,12 +100,17 @@ namespace FontEffectsLib.FontTypes
         public event EventHandler<CharacterTypedEventArgs> CharacterTyped;
 
         /// <summary>
-        /// Since we're doing primarily array access, an array is better used internally.
+        /// Since we're overriding Text property, we need a StringBuilder to match the parent class
         /// </summary>
-        private char[] _textToType = new char[0];
+        private StringBuilder _textToType;
 
         /// <summary>
-        /// This value can be cached as the text to type is immutable after creation.
+        /// Since StringBuilder is a sealed class, and does not provide a "TextChanged" event, we need to track it manually
+        /// </summary>
+        private bool _isTextChanged;
+
+        /// <summary>
+        /// We'll calculate the text size once; we'll re-calculate whenever _isTextChanged is true
         /// </summary>
         private Vector2 _cachedTextTypeSize;
 
@@ -130,6 +135,13 @@ namespace FontEffectsLib.FontTypes
         {
             get
             {
+                //Do we need to recalculate the size?
+                if (_isTextChanged)
+                {
+                    _cachedTextTypeSize = _font.MeasureString(_textToType.ToString());
+                    _isTextChanged = false;
+                }
+
                 return _cachedTextTypeSize * _scale;
             }
         }
@@ -153,7 +165,7 @@ namespace FontEffectsLib.FontTypes
             if (typeText)
             {
                 _text.Clear();
-                _text.Append(_textToType);
+                _text.Append(_textToType.ToString());
             }
 
             changeState(FontState.Finished);
@@ -170,9 +182,23 @@ namespace FontEffectsLib.FontTypes
             _elapsedDelayTime = TimeSpan.Zero;
             DelayTime = delayTime;
             _currentLetterIndex = -1;
-            _textToType = textToType.ToCharArray();
+            
+            _textToType = new StringBuilder(textToType);
+            _isTextChanged = false;
+
             _cachedTextTypeSize = _font.MeasureString(textToType);
             _state = FontState.NotStarted;
+        }
+
+        public override StringBuilder Text
+        {
+            get
+            {
+                //Since we have no way of knowing if the text changed via this property, we'll presume it has
+                _isTextChanged = true;
+
+                return _textToType;
+            }
         }
 
         public override void Update(GameTime gameTime)
@@ -188,14 +214,14 @@ namespace FontEffectsLib.FontTypes
                         _elapsedDelayTime = TimeSpan.Zero;                                               
                         _currentLetterIndex++;
      
-                        if (_currentLetterIndex >= _textToType.Length)
+                        if (_currentLetterIndex >= _textToType.ToString().Length)
                         {
                             Finished(false);
                             return;
                         }
 
                         EventHandler<CharacterTypedEventArgs> handler = CharacterTyped;                
-                        CharacterTypedEventArgs arguments = new CharacterTypedEventArgs(_textToType[_currentLetterIndex]);
+                        CharacterTypedEventArgs arguments = new CharacterTypedEventArgs(_textToType.ToString()[_currentLetterIndex]);
                         if (handler != null)
                         {
                             handler(this, arguments);
